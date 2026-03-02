@@ -1,0 +1,17 @@
+{
+    "name": "parklife/website",
+    "description": "Park Life Properties — sitio web PHP 8.2",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "files": []
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "vendor-dir": "vendor"
+    }
+}

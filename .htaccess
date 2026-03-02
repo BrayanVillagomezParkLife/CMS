@@ -1,0 +1,46 @@
+# ── Subida de archivos ────────────────────────────────────────────────────────
+php_value upload_max_filesize 20M
+php_value post_max_size 25M
+php_value memory_limit 128M
+php_value max_execution_time 60
+
+# ── URLs limpias + multiidioma ────────────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1. Archivos y directorios físicos → servir directo
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 2. Idioma inglés: /en o /en/* → router.php con LANG=en
+    RewriteRule ^en/?$       index.php [QSA,L,E=LANG:en]
+    RewriteRule ^en/(.*)$    index.php [QSA,L,E=LANG:en]
+
+    # 3. Todo lo demás → router.php (español por defecto)
+    RewriteRule ^(.*)$       index.php [QSA,L]
+</IfModule>
+
+# ── Seguridad ─────────────────────────────────────────────────────────────────
+Options -Indexes
+<FilesMatch "\.(env|sql|log|sh)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ── Headers de seguridad ──────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ── Caché de assets estáticos ─────────────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/webp  "access plus 1 month"
+    ExpiresByType image/jpeg  "access plus 1 month"
+    ExpiresByType image/png   "access plus 1 month"
+    ExpiresByType text/css    "access plus 1 week"
+    ExpiresByType text/javascript "access plus 1 week"
+</IfModule>

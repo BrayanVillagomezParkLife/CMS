@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Departamentos y Propiedades Amuebladas Premium en México | Park Life Properties</title>
+    <meta name="description" content="Renta departamentos amueblados premium en CDMX, Guadalajara, Querétaro y Riviera Nayarit. Estancias por días o meses con todo incluido. Factura disponible.">
+    <meta name="keywords" content="departamentos amueblados CDMX, renta mensual Polanco, corporate housing México, departamento amueblado Condesa, renta vacacional Riviera Nayarit">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://www.parklife.mx/">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Park Life Properties">
+    <meta property="og:title" content="Departamentos y Propiedades Amuebladas Premium en México | Park Life Properties">
+    <meta property="og:description" content="Renta departamentos amueblados premium en CDMX, Guadalajara, Querétaro y Riviera Nayarit. Estancias por días o meses con todo incluido. Factura disponible.">
+    <meta property="og:url" content="https://www.parklife.mx/">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:image" content="https://www.parklife.mx/pics/og_home.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Departamentos y Propiedades Amuebladas Premium en México | Park Life Properties">
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@parklifeproperties">
+    <meta name="twitter:title" content="Departamentos y Propiedades Amuebladas Premium en México | Park Life Properties">
+    <meta name="twitter:description" content="Renta departamentos amueblados premium en CDMX, Guadalajara, Querétaro y Riviera Nayarit. Estancias por días o meses con todo incluido. Factura disponible.">
+    <meta name="twitter:image" content="https://www.parklife.mx/pics/og_home.jpg">
+        <!-- Preloads -->
+    <link rel="preload" as="image" href="https://www.parklife.mx/pics/propiedades/condesa/condesa18_1771716255.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://hotels.cloudbeds.com">
+
+    <!-- Hreflang multiidioma -->
+        <link rel="alternate" hreflang="es"        href="/">
+    <link rel="alternate" hreflang="en"        href="/en/">
+    <link rel="alternate" hreflang="x-default" href="/">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Asap+Condensed:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Cloudbeds Widget — async para no bloquear el render -->
+    <script src="https://hotels.cloudbeds.com/widget/load/i5lEbX/immersive" async defer></script>
+
+    <!-- reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <!-- Tailwind Config -->
+    <script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: {
+                'park-blue':       '#202944',
+                'park-blue-light': '#2C3A5E',
+                'park-blue-dark':  '#161d30',
+                'park-sage':       '#BAC4B9',
+                'park-sage-light': '#D4DCD3',
+                'park-cream':      '#f9f9f9'
+            },
+            fontFamily: {
+                'asap':    ['Asap Condensed', 'sans-serif'],
+                'jakarta': ['Plus Jakarta Sans', 'sans-serif']
+            }
+        }}
+    }
+    </script>
+
+    <!-- CSS Variables desde BD + Estilos globales -->
+        <style>
+        :root {
+            --park-blue:       #202944;
+            --park-blue-light: #2C3A5E;
+            --park-sage:       #BAC4B9;
+        }
+        /* Sobreescribir clases Tailwind con variables dinámicas */
+        .bg-park-blue       { background-color: var(--park-blue) !important; }
+        .text-park-blue     { color: var(--park-blue) !important; }
+        .border-park-blue   { border-color: var(--park-blue) !important; }
+        .bg-park-blue-light { background-color: var(--park-blue-light) !important; }
+        .bg-park-sage       { background-color: var(--park-sage) !important; }
+        .text-park-sage     { color: var(--park-sage) !important; }
+    </style>
+
+    <style>
+        ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#f1f1f1}
+        ::-webkit-scrollbar-thumb{background:#BAC4B9;border-radius:4px}
+        ::-webkit-scrollbar-thumb:hover{background:#202944}
+        ::selection{background:#BAC4B9;color:#202944}
+        .loader{transition:opacity .6s ease,visibility .6s ease}
+        .loader.hidden{opacity:0;visibility:hidden}
+        .navbar-blur{backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+        .reveal{opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.4,0,.2,1)}
+        .reveal.active{opacity:1;transform:translateY(0)}
+        .card-lift{transition:all .4s cubic-bezier(.4,0,.2,1)}
+        .card-lift:hover{transform:translateY(-8px);box-shadow:0 25px 50px -12px rgba(32,41,68,.25)}
+        .property-card img{transition:transform .7s cubic-bezier(.4,0,.2,1)}
+        .property-card:hover img{transform:scale(1.08)}
+        .property-card{transition:all .4s cubic-bezier(.4,0,.2,1)}
+        .property-card:hover{transform:translateY(-8px);box-shadow:0 25px 50px -12px rgba(32,41,68,.25)}
+        .flatpickr-calendar{font-family:"Plus Jakarta Sans",sans-serif!important;border-radius:16px!important;box-shadow:0 25px 50px -12px rgba(0,0,0,.25)!important}
+        .flatpickr-day.selected,.flatpickr-day.startRange,.flatpickr-day.endRange{background:#202944!important;border-color:#202944!important}
+        .flatpickr-day.inRange{background:#BAC4B9!important;border-color:#BAC4B9!important}
+        .number-input::-webkit-inner-spin-button,.number-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+        .number-input{-moz-appearance:textfield}
+        .filter-tab{transition:all .3s ease;cursor:pointer}
+        .filter-tab.active{background:#202944;color:white}
+        .filter-tab:not(.active):hover{background:#BAC4B9;color:#202944}
+        .mode-tab{transition:all .3s ease}.mode-tab.active{background:#202944;color:white}
+        .booking-hero-wrapper{transition:all .4s cubic-bezier(.4,0,.2,1)}
+        @media(max-width:1023px){.booking-container{padding-left:5%!important;padding-right:5%!important}}
+        .booking-hero-wrapper.is-sticky{position:fixed;top:80px;left:0;right:0;z-index:2147483647;padding:12px 5%;background:linear-gradient(to bottom,rgba(32,41,68,.98),rgba(32,41,68,.95));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 30px rgba(0,0,0,.3);animation:slideDown .4s ease}
+        @keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        .booking-hero-wrapper.is-sticky .booking-container{max-width:1200px;margin:0 auto}
+        .booking-hero-wrapper.is-sticky .booking-engine{border-radius:12px}
+        .booking-hero-wrapper.is-sticky .trust-badges{display:none}
+        body.booking-sticky{padding-top:80px}
+        @media(max-width:1023px){
+            #widgetDays>div>div,#widgetMonths form>div>div{width:100%!important;border-right:none!important;border-bottom:1px solid #f3f4f6;flex-shrink:0}
+            #widgetDays>div,#widgetMonths form>div{flex-direction:column!important;min-height:unset!important}
+            .mascota-row{display:flex!important;flex-direction:row!important;border-bottom:1px solid #f3f4f6}
+            .mascota-row>div{flex:1!important;width:auto!important;border-right:1px solid #f3f4f6!important;border-bottom:none!important}
+            .mascota-row>div:last-child{border-right:none!important}
+            #widgetDays>div>div:last-child,#widgetMonths form>div>div:last-child{border-bottom:none;padding:12px}
+            #widgetDays>div>div:last-child button,#widgetMonths form>div>div:last-child button{width:100%!important}
+        }
+        .booking-widgets{transition:all .35s cubic-bezier(.4,0,.2,1)}
+        @media(max-width:1023px){
+            .booking-hero-wrapper.is-sticky{padding:8px 5%;top:72px}
+            .booking-hero-wrapper.is-sticky .booking-widgets{display:none!important}
+            .booking-hero-wrapper.is-sticky.is-expanded .booking-widgets{display:block!important}
+        }
+        @media(min-width:1024px){.booking-hero-wrapper.is-sticky .booking-widgets{display:block!important}}
+        .booking-mobile-collapsed{display:none}
+        .flip-card{perspective:1200px;cursor:pointer}
+        .flip-inner{position:relative;width:100%;height:100%;transition:transform .65s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+        .flip-card:hover .flip-inner{transform:rotateY(180deg)}
+        .flip-front,.flip-back{position:absolute;top:0;left:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:1rem;overflow:hidden}
+        .flip-back{transform:rotateY(180deg);background:rgba(32,41,68,0.65);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.18)}
+        .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .job-card{transition:all .35s ease;border-left:3px solid transparent}
+        .job-card:hover{border-left-color:#BAC4B9;transform:translateX(4px);box-shadow:0 10px 30px rgba(32,41,68,.12)}
+        .slide{opacity:0;transition:opacity 1.4s ease;z-index:0}
+        .slide.active{opacity:1;z-index:1}
+        .slide.active img{animation:kenburns 8s ease forwards}
+        @keyframes kenburns{from{transform:scale(1.08) translateX(0)}to{transform:scale(1) translateX(0)}}
+        .scroll-indicator{animation:bounce 2s ease-in-out infinite}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+        .animate-pulse-slow{animation:pulseSlow 4s ease-in-out infinite}
+        @keyframes pulseSlow{0%,100%{opacity:.5}50%{opacity:1}}
+        .slide-dot{cursor:pointer}
+        .hero-badge{animation:fadeUp .6s ease .3s both}
+        .hero-h1{animation:fadeUp .6s ease .5s both}
+        .hero-p{animation:fadeUp .6s ease .7s both}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    </style>
+</head>
+<body class="font-jakarta bg-park-cream text-gray-800 antialiased">
+
+<!-- LOADER -->
+<div id="loader" class="loader fixed inset-0 z-[9999] bg-park-blue flex items-center justify-center">
+    <div class="text-center">
+        <div class="relative w-20 h-20 mx-auto mb-6">
+            <div class="absolute inset-0 border-4 border-park-sage/30 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-transparent border-t-park-sage rounded-full animate-spin"></div>
+        </div>
+        <p class="text-white font-asap text-3xl font-bold tracking-[.3em]">PARK LIFE</p>
+        <p class="text-park-sage/70 text-xs tracking-[.3em] uppercase mt-2">Properties</p>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+
+            <!-- Logo -->
+            <a href="/en/" class="flex items-center">
+                <img src="/pics/Logo_ParkLife_Blanco.png"
+                     id="logo-white" alt="Park Life Properties"
+                     class="h-10 sm:h-12 w-auto transition-all duration-300"
+                     onerror="this.style.display='none'">
+                <img src="/pics/Logo_Parklife.png"
+                     id="logo-blue" alt="Park Life Properties"
+                     class="h-10 sm:h-12 w-auto transition-all duration-300 hidden"
+                     onerror="this.style.display='none'">
+            </a>
+
+            <!-- Links desktop -->
+            <div class="hidden lg:flex items-center gap-8">
+                <a href="/en/#inicio"        class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Inicio</a>
+                <a href="/en/#propiedades"   class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Propiedades</a>
+                <a href="/en/#prensa"        class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Prensa</a>
+                <a href="/en/#nosotros"      class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Nosotros</a>
+                <a href="/en/#bolsa-trabajo" class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Únete</a>
+                <a href="/en/#contacto"      class="bg-white text-park-blue px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-park-sage transition-all duration-300">Contacto</a>
+                <!-- Switcher de idioma -->
+                <a href="/"
+                   class="flex items-center gap-1.5 text-white/70 hover:text-white text-sm transition-colors border border-white/20 hover:border-white/50 rounded-full px-3 py-1.5"
+                   translate="no"
+                   title="Ver en Español">
+                    <span>🇲🇽</span>
+                    <span class="font-medium">Español</span>
+                </a>
+            </div>
+
+            <!-- Menú mobile -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-white">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile menu dropdown -->
+    <div id="mobile-menu" class="lg:hidden hidden bg-white shadow-2xl rounded-b-3xl mx-4">
+        <div class="px-6 py-8 space-y-4">
+            <a href="/en/#inicio"        class="block text-park-blue font-medium py-2">Inicio</a>
+            <a href="/en/#propiedades"   class="block text-park-blue font-medium py-2">Propiedades</a>
+            <a href="/en/#prensa"        class="block text-park-blue font-medium py-2">Prensa</a>
+            <a href="/en/#nosotros"      class="block text-park-blue font-medium py-2">Nosotros</a>
+            <a href="/en/#bolsa-trabajo" class="block text-park-blue font-medium py-2">Únete al equipo</a>
+            <a href="/en/#contacto"      class="block bg-park-blue text-white text-center px-6 py-3 rounded-xl font-semibold">Contacto</a>
+            <a href="/"
+               class="flex items-center gap-2 text-park-blue/60 hover:text-park-blue py-2 border-t border-gray-100 pt-4 text-sm font-medium"
+               translate="no">
+                <span>🇲🇽</span>
+                <span>Español</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════════ -->
+<section id="inicio" class="relative min-h-screen flex items-center overflow-hidden">
+
+    <!-- Slideshow background -->
+    <div class="absolute inset-0" id="heroSlideshow">
+                <div class="slide active absolute inset-0">
+            <img src="/pics/propiedades/condesa/condesa18_1771716255.webp" class="w-full h-full object-cover"
+                 alt="Park Life Condesa">
+        </div>
+                <div class="slide  absolute inset-0">
+            <img src="/pics/general/hero_masaryk_1771730788.png" class="w-full h-full object-cover"
+                 alt="Park Life Masaryk">
+        </div>
+                <div class="slide  absolute inset-0">
+            <img src="/pics/general/hero_lamartine_1771730827.jpg" class="w-full h-full object-cover"
+                 alt="Park Life Lamartine">
+        </div>
+                <div class="slide  absolute inset-0">
+            <img src="/pics/general/hero_queretaro_1771730844.png" class="w-full h-full object-cover"
+                 alt="Park Life Queretaro">
+        </div>
+                <div class="slide  absolute inset-0">
+            <img src="/pics/general/carrousel_1_1771731670.webp" class="w-full h-full object-cover"
+                 alt="Park Life Santa Fe Paradox">
+        </div>
+                <div class="slide  absolute inset-0">
+            <img src="/pics/general/centralpark12_1771731707.webp" class="w-full h-full object-cover"
+                 alt="Park Life Guadalajara">
+        </div>
+                        <div class="absolute inset-0 bg-gradient-to-b from-park-blue/85 via-park-blue/65 to-park-blue/90"></div>
+    </div>
+
+    <div class="absolute top-1/4 right-1/4 w-80 h-80 bg-park-sage/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+    <div class="absolute bottom-1/3 left-1/5 w-96 h-96 bg-park-sage/10 rounded-full blur-3xl pointer-events-none animate-pulse-slow" style="animation-delay:2s"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-6 w-full">
+        <div class="text-center text-white mb-6">
+
+            <div class="hero-badge inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                <span class="text-sm font-medium">14 propiedades disponibles en México</span>
+            </div>
+
+            <h1 class="hero-h1 font-asap text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-3">
+                Tu hogar en<br>
+                <span class="text-park-sage inline-flex items-center gap-3">
+                    <span id="heroDestino">cualquier destino</span>
+                </span>
+            </h1>
+
+            <p class="hero-p text-lg sm:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
+                Rentas premium en las mejores ubicaciones de México.<br class="hidden sm:block">
+                Desde una noche hasta toda la vida.
+            </p>
+
+            <!-- Dots del slideshow -->
+            <div class="flex justify-center gap-2 mt-6" id="slideDots">
+                                                <span class="slide-dot w-6 bg-white h-1 rounded-full transition-all duration-500"></span>
+                                <span class="slide-dot w-2 bg-white/30 h-1 rounded-full transition-all duration-500"></span>
+                                <span class="slide-dot w-2 bg-white/30 h-1 rounded-full transition-all duration-500"></span>
+                                <span class="slide-dot w-2 bg-white/30 h-1 rounded-full transition-all duration-500"></span>
+                                <span class="slide-dot w-2 bg-white/30 h-1 rounded-full transition-all duration-500"></span>
+                                <span class="slide-dot w-2 bg-white/30 h-1 rounded-full transition-all duration-500"></span>
+                            </div>
+        </div>
+
+        <!-- ── BOOKING ENGINE ── -->
+        <div class="booking-hero-wrapper" id="bookingHeroWrapper">
+            <div class="booking-container max-w-5xl mx-auto w-full">
+
+                <!-- Pill tabs -->
+                <div class="flex justify-center mb-3" id="pillContainer" onclick="expandOnMobile()">
+                    <div class="inline-flex items-center rounded-full p-1 gap-0.5"
+                         style="background:rgba(255,255,255,0.18);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.35);box-shadow:0 8px 32px rgba(0,0,0,.15)">
+                        <button id="toggleDays" onclick="setPlayzo('days')"
+                                class="px-7 py-2.5 rounded-full text-sm font-bold transition-all duration-200"
+                                style="background:rgba(255,255,255,0.95);color:#202944;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+                            Por Días
+                        </button>
+                        <button id="toggleMonths" onclick="setPlayzo('months')"
+                                class="px-7 py-2.5 rounded-full text-sm font-semibold transition-all duration-200"
+                                style="color:rgba(255,255,255,0.65)">
+                            Por Meses
+                        </button>
+                    </div>
+                </div>
+
+                <div class="booking-widgets">
+
+                <!-- ══ MODO DÍAS ══ -->
+                <div id="widgetDays" class="booking-engine bg-white rounded-2xl shadow-2xl overflow-hidden">
+                    <div class="flex flex-col lg:flex-row lg:items-stretch lg:divide-x divide-gray-100" style="min-height:90px">
+                        <div class="flex flex-col justify-center px-6 py-5 lg:w-44 flex-shrink-0">
+                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Plazo</p>
+                            <p class="text-sm font-semibold text-park-blue flex items-center gap-1.5">
+                                Por Días <i data-lucide="clock" class="w-3.5 h-3.5 text-gray-300"></i>
+                            </p>
+                        </div>
+                        <div class="flex-1 min-w-0 flex flex-col justify-center px-6 py-5 border-t lg:border-t-0">
+                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Propiedad</p>
+                            <div class="relative">
+                                <select id="bk-property" class="w-full bg-transparent border-none p-0 text-sm font-semibold text-park-blue appearance-none outline-none cursor-pointer pr-4">
+                                    <option value="">Seleccionar...</option>
+                                                                        <optgroup label="Ciudad de México">
+                                                                                <option value="condesa">Park Life Condesa</option>
+                                                                                <option value="masaryk">Park Life Masaryk</option>
+                                                                                <option value="paradox">Park Life Santa Fe Paradox</option>
+                                                                                <option value="santa-fe">Park Life Santa Fe Siroco</option>
+                                                                                <option value="lamartine">Park Life Lamartine</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Guadalajara">
+                                                                                <option value="guadalajara">Park Life Guadalajara</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Querétaro">
+                                                                                <option value="queretaro">Park Life Queretaro</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Riviera Nayarit">
+                                                                                <option value="peninsula">Park Life Península</option>
+                                                                                <option value="nautico">Park Life Nautico</option>
+                                                                                <option value="tizate">Park Life Tizate</option>
+                                                                                <option value="narval">Park Life Narval</option>
+                                                                                <option value="bolongo">Park Life Bolongo</option>
+                                                                                <option value="orquideas">Park Life Orquideas</option>
+                                                                                <option value="san-pancho">Hotel,&lt;br&gt;Hacienda San Pancho</option>
+                                                                            </optgroup>
+                                                                    </select>
+                                <i data-lucide="map-pin" class="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-300 pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center px-6 py-5 border-t lg:border-t-0 flex-[1.2]">
+                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Fechas de estancia</p>
+                            <div class="relative">
+                                <input type="text" id="bk-dates" placeholder="Seleccionar fechas" readonly
+                                       class="w-full bg-transparent border-none p-0 text-sm font-semibold text-park-blue cursor-pointer outline-none placeholder-gray-300 pr-5">
+                                <i data-lucide="calendar" class="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-300 pointer-events-none"></i>
+                            </div>
+                            <input type="hidden" id="bk-checkin">
+                            <input type="hidden" id="bk-checkout">
+                        </div>
+                        <div class="flex flex-col justify-center px-6 py-5 border-t lg:border-t-0 lg:w-36 flex-shrink-0">
+                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Huéspedes</p>
+                            <div class="flex items-center gap-2">
+                                <button onclick="bkDec()" type="button" class="w-6 h-6 rounded-full border border-gray-200 flex items-center justify-center hover:border-park-blue transition-colors text-xs">−</button>
+                                <input type="number" id="bk-guests" value="2" min="1" max="10"
+                                       class="number-input w-8 text-center text-sm font-semibold text-park-blue border-none outline-none p-0">
+                                <button onclick="bkInc()" type="button" class="w-6 h-6 rounded-full border border-gray-200 flex items-center justify-center hover:border-park-blue transition-colors text-xs">+</button>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 p-3 flex items-center border-t lg:border-t-0">
+                            <button onclick="bkSearch()" type="button"
+                                    class="w-full lg:w-auto bg-park-blue text-white px-7 rounded-xl font-bold text-sm hover:bg-park-blue-light transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+                                    style="min-height:56px">
+                                Buscar <i data-lucide="search" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ MODO MESES ══ -->
+                <form id="widgetMonths" class="hidden booking-engine bg-white rounded-2xl shadow-2xl overflow-hidden" onsubmit="submitLead(event)">
+                    <input type="hidden" name="csrf_token"      value="493319968ad38a068af403992bd077439ac652ec2b1deaccc54cb3c38e2c3e45">
+                    <input type="hidden" name="form_type"       value="lead_mensual">
+                    <input type="text"   name="website"         style="display:none" tabindex="-1" autocomplete="off">
+                    <input type="text"   name="confirm_email"   style="display:none" tabindex="-1" autocomplete="off">
+                    <input type="text"   name="phone_confirm"   style="display:none" tabindex="-1" autocomplete="off">
+                    <input type="hidden" name="form_timestamp"  id="leadFormTimestamp">
+                    <div class="flex flex-col lg:flex-row lg:items-stretch lg:divide-x divide-gray-100" style="min-height:90px">
+                        <div class="flex-1 flex flex-col justify-center px-5 py-5 border-r border-gray-100">
+                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Propiedad</p>
+                            <div class="relative">
+                                <select name="propiedad_slug" id="bk-prop-months" class="w-full bg-transparent border-none p-0 text-sm font-semibold text-park-blue appearance-none outline-none cursor-pointer pr-4">
+                                    <option value="">Seleccionar...</option>
+                                                                        <optgroup label="Ciudad de México">
+                                                                                <option value="condesa" data-id="2">Park Life Condesa</option>
+                                                                                <option value="masaryk" data-id="4">Park Life Masaryk</option>
+                                                                                <option value="paradox" data-id="5">Park Life Santa Fe Paradox</option>
+                                                                                <option value="santa-fe" data-id="6">Park Life Santa Fe Siroco</option>
+                                                                                <option value="lamartine" data-id="14">Park Life Lamartine</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Guadalajara">
+                                                                                <option value="guadalajara" data-id="1">Park Life Guadalajara</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Querétaro">
+                                                                                <option value="queretaro" data-id="3">Park Life Queretaro</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Riviera Nayarit">
+                                                                                <option value="peninsula" data-id="7">Park Life Península</option>
+                                                                                <option value="nautico" data-id="8">Park Life Nautico</option>
+                                                                                <option value="tizate" data-id="9">Park Life Tizate</option>
+                                                                                <option value="narval" data-id="10">Park Life Narval</option>
+                                                                                <option value="bolongo" data-id="11">Park Life Bolongo</option>
+                                                                                <option value="orquideas" data-id="12">Park Life Orquideas</option>
+                                                                                <option value="san-pancho" data-id="13">Hotel,&lt;br&gt;Hacienda San Pancho</option>
+                                                                            </optgroup>
+                                                                    </select>
+                                <i data-lucide="map-pin" class="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-300 pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center px-5 py-5 border-r border-gray-100">
+                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Email</p>
+                            <input type="email" name="email" placeholder="tu@email.com" required
+                                   class="bg-transparent border-none p-0 text-sm font-semibold text-park-blue outline-none placeholder-gray-300 w-full">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center px-5 py-5 border-r border-gray-100">
+                            <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">WhatsApp</p>
+                            <input type="tel" name="telefono" placeholder="+52 55 0000 0000" required
+                                   class="bg-transparent border-none p-0 text-sm font-semibold text-park-blue outline-none placeholder-gray-300 w-full">
+                        </div>
+                        <div class="mascota-row flex-shrink-0" style="display:contents">
+                            <div class="flex flex-col justify-center items-center py-5 border-r border-gray-100 flex-shrink-0" style="width:90px">
+                                <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-2">Mascota</p>
+                                <label class="cursor-pointer">
+                                    <input type="checkbox" id="bk-mascota" name="mascota" class="sr-only peer">
+                                    <div class="w-8 h-8 rounded-lg border-2 border-gray-200 peer-checked:border-park-blue peer-checked:bg-park-blue/5 flex items-center justify-center transition-all">
+                                        <i data-lucide="paw-print" class="w-4 h-4 text-gray-300"></i></div></label>
+                            </div>
+                            <div class="flex flex-col justify-center items-center py-5 border-r border-gray-100 flex-shrink-0" style="width:90px">
+                                <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-2">Muebles</p>
+                                <label class="cursor-pointer">
+                                    <input type="checkbox" id="bk-amueblado" name="amueblado" class="sr-only peer" checked>
+                                    <div class="w-8 h-8 rounded-lg border-2 border-park-blue bg-park-blue/5 flex items-center justify-center transition-all">
+                                        <i data-lucide="sofa" class="w-4 h-4 text-park-blue"></i></div></label>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 p-3 flex items-center">
+                            <button type="submit" id="leadSubmitBtn"
+                                    class="w-full lg:w-auto bg-park-blue text-white px-7 rounded-xl font-bold text-sm hover:bg-park-blue-light transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+                                    style="min-height:56px">
+                                <span class="btn-text">Cotizar</span>
+                                <span class="btn-loading hidden"><i data-lucide="loader" class="w-4 h-4 animate-spin"></i></span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 btn-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                </div><!-- /booking-widgets -->
+
+                <!-- Mobile collapsed (sticky) -->
+                <div class="booking-mobile-collapsed bg-white rounded-xl px-4 py-3 items-center justify-between gap-3" id="bookingMobileCollapsed">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="search" class="w-4 h-4 text-park-blue"></i>
+                        <span class="text-park-blue text-sm font-semibold" id="mobileCollapsedLabel">¿Cuándo y dónde?</span>
+                    </div>
+                    <button onclick="toggleMobileBooking()" class="bg-park-blue text-white px-5 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5">
+                        Buscar <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-10">
+            <a href="#stats" class="scroll-indicator inline-flex flex-col items-center gap-2 text-white/40 hover:text-white/70 transition-colors">
+                <span class="text-xs tracking-widest uppercase">Explorar</span>
+                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ STATS ═══════════════════════════════════════════════════════════════ -->
+<section id="stats" class="py-12 bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            <div class="reveal">
+                <div class="font-asap text-5xl font-bold text-park-blue">14</div>
+                <div class="text-gray-500 text-sm mt-1">Propiedades Premium</div>
+            </div>
+            <div class="reveal" style="transition-delay:.1s">
+                <div class="font-asap text-5xl font-bold text-park-blue">4</div>
+                <div class="text-gray-500 text-sm mt-1">Destinos en México</div>
+            </div>
+            <div class="reveal" style="transition-delay:.2s">
+                <div class="font-asap text-5xl font-bold text-park-blue">4.9</div>
+                <div class="flex items-center justify-center gap-1 mt-1">
+                    <i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i>
+                    <span class="text-gray-500 text-sm">Calificación promedio</span>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay:.3s">
+                <div class="font-asap text-5xl font-bold text-park-blue">+5k</div>
+                <div class="text-gray-500 text-sm mt-1">Huéspedes satisfechos</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ PROPIEDADES ══════════════════════════════════════════════════════════ -->
+<section id="propiedades" class="py-20 sm:py-28 bg-park-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12 reveal">
+            <span class="inline-block bg-park-sage/20 text-park-blue px-4 py-1.5 rounded-full text-sm font-semibold mb-4">Nuestro Portafolio</span>
+            <h2 class="font-asap text-4xl sm:text-5xl font-bold text-park-blue mb-6">14 Propiedades, un Estilo de Vida</h2>
+            <p class="text-gray-600 text-lg leading-relaxed">Desde la vibrante Condesa hasta la serena Riviera Nayarit, cada propiedad es una experiencia diseñada para ti.</p>
+        </div>
+
+        <!-- Filtros por destino -->
+        <div class="flex flex-wrap justify-center gap-2 mb-10 reveal">
+            <button class="filter-tab active px-5 py-2 rounded-full text-sm font-semibold border border-park-blue/20"
+                    onclick="filterProperties('all',this)">Todos</button>
+                        <button class="filter-tab px-5 py-2 rounded-full text-sm font-semibold border border-park-blue/20 text-park-blue"
+                    onclick="filterProperties('cdmx',this)">
+                Ciudad de México            </button>
+                        <button class="filter-tab px-5 py-2 rounded-full text-sm font-semibold border border-park-blue/20 text-park-blue"
+                    onclick="filterProperties('guadalajara',this)">
+                Guadalajara            </button>
+                        <button class="filter-tab px-5 py-2 rounded-full text-sm font-semibold border border-park-blue/20 text-park-blue"
+                    onclick="filterProperties('queretaro',this)">
+                Querétaro            </button>
+                        <button class="filter-tab px-5 py-2 rounded-full text-sm font-semibold border border-park-blue/20 text-park-blue"
+                    onclick="filterProperties('riviera-nayarit',this)">
+                Riviera Nayarit            </button>
+                    </div>
+
+        <!-- Grid de propiedades -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="propertiesGrid">
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="guadalajara"
+                 style="transition-delay:0.00s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_guadalajara.webp" alt="Park Life Guadalajara" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#7c4d14">
+                                Guadalajara                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Guadalajara</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                Vallarta San Jorge, Guadalajara                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Guadalajara</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Guadalajara</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                ¡Una joya en la Perla Tapatía!                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Vallarta San Jorge, Guadalajara                                </p>
+                            </div>
+                        </div>
+                        <a href="/guadalajara"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="cdmx"
+                 style="transition-delay:0.05s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_condesa.webp" alt="Park Life Condesa" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Ciudad de México                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Condesa</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                Hipódromo Condesa, CDMX                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Ciudad de México</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Condesa</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                La colonia con más estilo de CDMX                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">$26,500 MXN / mes</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Hipódromo Condesa, CDMX                                </p>
+                            </div>
+                        </div>
+                        <a href="/condesa"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="queretaro"
+                 style="transition-delay:0.10s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_queretaro.webp" alt="Park Life Queretaro" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#4a5568">
+                                Querétaro                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Queretaro</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                Centro Sur, Querétaro                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Querétaro</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Queretaro</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                ¡Modernidad y estilo!                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Centro Sur, Querétaro                                </p>
+                            </div>
+                        </div>
+                        <a href="/queretaro"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="cdmx"
+                 style="transition-delay:0.15s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_masaryk.webp" alt="Park Life Masaryk" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Ciudad de México                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Masaryk</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                Polanco, CDMX                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Ciudad de México</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Masaryk</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                ¡Polanco en todo su esplendor!                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Polanco, CDMX                                </p>
+                            </div>
+                        </div>
+                        <a href="/masaryk"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="cdmx"
+                 style="transition-delay:0.20s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_paradox.webp" alt="Park Life Santa Fe Paradox" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Ciudad de México                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Santa Fe Paradox</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                Santa Fe, CDMX                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Ciudad de México</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Santa Fe Paradox</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                ¡Vive en lo mejor de Santa Fe!                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Santa Fe, CDMX                                </p>
+                            </div>
+                        </div>
+                        <a href="/paradox"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="cdmx"
+                 style="transition-delay:0.25s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_santa-fe.webp" alt="Park Life Santa Fe Siroco" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Ciudad de México                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Santa Fe Siroco</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                Santa Fe, CDMX                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Ciudad de México</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Santa Fe Siroco</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                ¡Santa Fe como no lo imaginabas!                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Santa Fe, CDMX                                </p>
+                            </div>
+                        </div>
+                        <a href="/santa-fe"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="riviera-nayarit"
+                 style="transition-delay:0.30s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_peninsula.webp" alt="Park Life Península" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Riviera Nayarit                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Península</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                , Vallarta                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Riviera Nayarit</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Península</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    , Vallarta                                </p>
+                            </div>
+                        </div>
+                        <a href="/peninsula"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="riviera-nayarit"
+                 style="transition-delay:0.35s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_nautico.webp" alt="Park Life Nautico" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Riviera Nayarit                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Nautico</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                , Vallarta                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Riviera Nayarit</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Nautico</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    , Vallarta                                </p>
+                            </div>
+                        </div>
+                        <a href="/nautico"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="riviera-nayarit"
+                 style="transition-delay:0.40s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_tizate.webp" alt="Park Life Tizate" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Riviera Nayarit                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Tizate</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                , Vallarta                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Riviera Nayarit</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Tizate</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    , Vallarta                                </p>
+                            </div>
+                        </div>
+                        <a href="/tizate"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="riviera-nayarit"
+                 style="transition-delay:0.45s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_narval.webp" alt="Park Life Narval" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Riviera Nayarit                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Narval</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                , Vallarta                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Riviera Nayarit</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Narval</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    , Vallarta                                </p>
+                            </div>
+                        </div>
+                        <a href="/narval"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="riviera-nayarit"
+                 style="transition-delay:0.50s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_bolongo.webp" alt="Park Life Bolongo" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Riviera Nayarit                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Bolongo</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                , Nayarit                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Riviera Nayarit</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Bolongo</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    , Nayarit                                </p>
+                            </div>
+                        </div>
+                        <a href="/bolongo"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="riviera-nayarit"
+                 style="transition-delay:0.55s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_orquideas.webp" alt="Park Life Orquideas" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Riviera Nayarit                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Orquideas</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                , Nayarit                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Riviera Nayarit</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Orquideas</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    , Nayarit                                </p>
+                            </div>
+                        </div>
+                        <a href="/orquideas"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="riviera-nayarit"
+                 style="transition-delay:0.60s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_san-pancho.webp" alt="Hotel,&lt;br&gt;Hacienda San Pancho" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Riviera Nayarit                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Hotel,&lt;br&gt;Hacienda San Pancho</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                , Nayarit                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Riviera Nayarit</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Hotel,&lt;br&gt;Hacienda San Pancho</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    , Nayarit                                </p>
+                            </div>
+                        </div>
+                        <a href="/san-pancho"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                        <div class="flip-card h-72 property-card reveal rounded-2xl shadow-md"
+                 data-dest="cdmx"
+                 style="transition-delay:0.65s">
+                <div class="flip-inner h-full">
+                    <div class="flip-front overflow-hidden">
+                        <img src="pics/card_lamartine.webp" alt="Park Life Lamartine" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-park-blue/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="text-white text-xs px-3 py-1 rounded-full font-semibold" style="background:#202944">
+                                Ciudad de México                            </span>
+                        </div>
+                                                <div class="absolute top-3 right-3">
+                            <span class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span>Disponible
+                            </span>
+                        </div>
+                                                <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="font-asap text-xl font-bold text-white leading-tight">Park Life Lamartine</h3>
+                            <p class="text-white/70 text-xs flex items-center gap-1 mt-0.5">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                , CDMX                            </p>
+                        </div>
+                    </div>
+                    <div class="flip-back flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-white/70">Ciudad de México</span>
+                            <h3 class="font-asap text-xl font-bold text-white mt-0.5 mb-2 leading-tight drop-shadow-sm">Park Life Lamartine</h3>
+                            <p class="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                                                            </p>
+                            <div class="border-t border-white/25 pt-3">
+                                <p class="text-white/70 text-[10px] uppercase tracking-widest font-bold mb-0.5">Renta</p>
+                                <p class="text-white font-black text-base leading-tight drop-shadow-sm">Consultar tarifas</p>
+                                <p class="text-white/70 text-xs mt-0.5 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    , CDMX                                </p>
+                            </div>
+                        </div>
+                        <a href="/lamartine"
+                           class="mt-3 block w-full text-center bg-park-sage text-park-blue py-2 rounded-xl text-sm font-black hover:bg-park-sage-light transition-all">
+                            Conoce más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+                    </div>
+
+        <div class="text-center mt-12 reveal">
+            <button onclick="launchCloudbeds()"
+                    class="inline-flex items-center gap-2 bg-park-blue text-white px-8 py-4 rounded-xl font-semibold hover:bg-park-blue-light transition-all duration-300 hover:shadow-xl">
+                <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                Verificar disponibilidad en todas las propiedades
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ PRENSA ═══════════════════════════════════════════════════════════════ -->
+<section id="prensa" class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
+            <span class="inline-block bg-park-sage/20 text-park-blue px-4 py-1.5 rounded-full text-sm font-semibold mb-4">Prensa</span>
+            <h2 class="font-asap text-4xl sm:text-5xl font-bold text-park-blue mb-4">Nos han dicho que somos los mejores</h2>
+            <p class="text-gray-500 text-lg">Park Life Properties en las publicaciones más importantes de México y Latinoamérica.</p>
+        </div>
+
+        <div class="flex flex-wrap justify-center items-center gap-8 sm:gap-14 mb-16 reveal">
+                        <span class="font-asap text-2xl font-bold text-gray-300 hover:text-park-blue transition-colors cursor-default tracking-tight">
+                Forbes            </span>
+                        <span class="font-asap text-2xl font-bold text-gray-300 hover:text-park-blue transition-colors cursor-default tracking-tight">
+                Expansión            </span>
+                        <span class="font-asap text-2xl font-bold text-gray-300 hover:text-park-blue transition-colors cursor-default tracking-tight">
+                El Economista            </span>
+                        <span class="font-asap text-2xl font-bold text-gray-300 hover:text-park-blue transition-colors cursor-default tracking-tight">
+                Business Insider            </span>
+                        <span class="font-asap text-2xl font-bold text-gray-300 hover:text-park-blue transition-colors cursor-default tracking-tight">
+                Architectural Digest            </span>
+                    </div>
+
+        <div class="grid md:grid-cols-3 gap-6 reveal">
+                                            <article class="group bg-park-cream rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 card-lift border border-gray-100">
+                                        <div class="h-28 bg-white flex items-center justify-center px-6 border-b border-gray-100">
+                        <img src="/pics/prensa_1771729132_867.jpg" alt="El CEO"
+                             class="max-h-16 max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                                        <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                                                        <span class="text-xs text-gray-400 ml-auto">2026</span>
+                        </div>
+                        <h3 class="font-asap text-xl font-bold text-park-blue mb-3 leading-snug">"Gustavo Tomé prepara OPI de Park Life, la primera fibra especializada en renta residencial"</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed mb-5 line-clamp-3">La nueva fibra busca capitalizar la oportunidad que representa un segmento poco explorado por los fideicomisos inmobiliarios: el de la vivienda en renta institucional</p>
+                                                <a href="https://elceo.com/mercados/gustavo-tome-fibra-bmv-renta/" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-1.5 text-park-blue font-semibold text-sm hover:gap-3 transition-all">
+                            Leer artículo <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                                            </div>
+                </article>
+                                <article class="group bg-park-cream rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 card-lift border border-gray-100">
+                                        <div class="h-28 bg-white flex items-center justify-center px-6 border-b border-gray-100">
+                        <img src="/pics/prensa_1771971702_348.webp" alt="Finaciero"
+                             class="max-h-16 max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                                        <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                                                        <span class="text-xs text-gray-400 ml-auto">2026</span>
+                        </div>
+                        <h3 class="font-asap text-xl font-bold text-park-blue mb-3 leading-snug">"Prueba de producto"</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed mb-5 line-clamp-3">tesfASfjalñFSHLFSDNB</p>
+                                                <a href="https://inmobiliare.com/park-life-fibra-vivienda-renta-bmv/" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-1.5 text-park-blue font-semibold text-sm hover:gap-3 transition-all">
+                            Leer artículo <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                                            </div>
+                </article>
+                                    </div>
+
+        <div class="text-center mt-12 reveal">
+            <a href="mailto:prensa@parklife.mx"
+               class="inline-flex items-center gap-2 border-2 border-park-blue text-park-blue px-8 py-3.5 rounded-xl font-semibold hover:bg-park-blue hover:text-white transition-all duration-300">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+                Contacto de prensa: prensa@parklife.mx            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ NOSOTROS ═════════════════════════════════════════════════════════════ -->
+<section id="nosotros" class="py-20 sm:py-28 bg-park-blue relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5"
+         style="background-image:url('data:image/svg+xml,%3Csvg width=60 height=60 viewBox=%270 0 60 60%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg fill=%27none%27 fill-rule=%27evenodd%27%3E%3Cg fill=%27%23ffffff%27 fill-opacity=%270.4%27%3E%3Cpath d=%27M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%27/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')">
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
+                <span class="inline-block bg-park-sage/20 text-park-sage px-4 py-1.5 rounded-full text-sm font-semibold mb-6">Quiénes somos</span>
+                <h2 class="font-asap text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                    Redefiniendo el<br><span class="text-park-sage">vivir premium</span><br>en México
+                </h2>
+                <p class="text-white/70 text-lg leading-relaxed mb-6">
+                    Park Life Properties nació con una sola misión: hacer que cada estancia en México sea memorable. No importa si vienes por trabajo, vacaciones o si estás buscando tu nuevo hogar — tenemos el espacio perfecto para ti.                </p>
+                <p class="text-white/60 text-base leading-relaxed mb-10">
+                    Con presencia en Ciudad de México, Guadalajara, Querétaro y la Riviera Nayarit, ofrecemos propiedades cuidadosamente seleccionadas con un estándar de servicio que pocas empresas pueden igualar.                </p>
+                <a href="#contacto"
+                   class="inline-flex items-center gap-2 bg-park-sage text-park-blue px-8 py-4 rounded-xl font-bold hover:bg-park-sage-light transition-all duration-300">
+                    Contáctanos <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </a>
+            </div>
+            <div class="grid grid-cols-2 gap-4 reveal">
+                <div class="bg-white/10 rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all">
+                    <div class="w-12 h-12 bg-park-sage/20 rounded-xl flex items-center justify-center mb-4"><i data-lucide="sparkles" class="w-6 h-6 text-park-sage"></i></div>
+                    <h4 class="font-asap text-lg font-bold text-white mb-2">Diseño Premium</h4>
+                    <p class="text-white/60 text-sm">Cada espacio cuidadosamente interiorizado para una experiencia visual única.</p>
+                </div>
+                <div class="bg-white/10 rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all mt-6">
+                    <div class="w-12 h-12 bg-park-sage/20 rounded-xl flex items-center justify-center mb-4"><i data-lucide="headphones" class="w-6 h-6 text-park-sage"></i></div>
+                    <h4 class="font-asap text-lg font-bold text-white mb-2">Servicio 24/7</h4>
+                    <p class="text-white/60 text-sm">Atención personalizada disponible en todo momento para lo que necesites.</p>
+                </div>
+                <div class="bg-white/10 rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all -mt-2">
+                    <div class="w-12 h-12 bg-park-sage/20 rounded-xl flex items-center justify-center mb-4"><i data-lucide="map-pin" class="w-6 h-6 text-park-sage"></i></div>
+                    <h4 class="font-asap text-lg font-bold text-white mb-2">Ubicaciones Clave</h4>
+                    <p class="text-white/60 text-sm">En los mejores barrios y destinos de México, siempre donde quieres estar.</p>
+                </div>
+                <div class="bg-white/10 rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all mt-4">
+                    <div class="w-12 h-12 bg-park-sage/20 rounded-xl flex items-center justify-center mb-4"><i data-lucide="shield-check" class="w-6 h-6 text-park-sage"></i></div>
+                    <h4 class="font-asap text-lg font-bold text-white mb-2">Todo Incluido</h4>
+                    <p class="text-white/60 text-sm">WiFi, limpieza, servicios y amenidades premium sin cargos ocultos.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
+<section id="faq" class="py-20 sm:py-28 bg-park-cream">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14 reveal">
+            <span class="inline-block bg-park-sage/20 text-park-blue px-4 py-1.5 rounded-full text-sm font-semibold mb-4">Preguntas frecuentes</span>
+            <h2 class="font-asap text-4xl sm:text-5xl font-bold text-park-blue mb-4">Resolvemos tus dudas</h2>
+            <p class="text-gray-500 text-lg">Todo lo que necesitas saber antes de reservar</p>
+        </div>
+        <div class="space-y-4 reveal">
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Cuáles son los métodos de pago aceptados?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Aceptamos pagos con tarjeta de crédito, débito y algunas opciones de pago digital.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Hay un mínimo de noches para reservar?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Sí, el mínimo de noches varía según la propiedad, pero generalmente es de dos noches.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Qué servicios están incluidos en la estancia?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Los servicios incluidos varían según la propiedad, pero generalmente incluyen Wi-Fi, limpieza semanal y acceso a las amenidades.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Se permite fumar en las propiedades de Park Life?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">No, todas nuestras propiedades son libres de humo.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Se aceptan mascotas?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Algunas de nuestras propiedades aceptan mascotas por un costo adicional. Consulte los detalles específicos al momento de la reserva.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Qué debo hacer si necesito cancelar mi reserva?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Puede cancelar su reserva desde su cuenta en nuestro sitio web o contactando a nuestro equipo de soporte.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Ofrecen servicio de limpieza?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Si ofrecemos servicio de limpieza, pregunta por nuestras diferentes modalidades.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Cómo puedo contactar al soporte de Park Life?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Puede contactarnos por correo electrónico, teléfono o mediante el chat en nuestro sitio web.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Qué debo hacer si tengo un problema durante mi estancia?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Contacte a nuestro equipo de soporte disponible las 24 horas para cualquier problema o emergencia.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Cuál es el horario de check-in y check-out?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">El check-in es a las 3:00 PM y el check-out es a las 11:00 AM. Puede solicitar horarios alternativos sujetos a disponibilidad.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Qué documentos necesito para el check-in?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Necesitará un documento de identidad válido y la confirmación de su reserva.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Hay estacionamiento disponible?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">La disponibilidad de estacionamiento varía según la propiedad. Consulte los detalles de la reserva para más información.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Ofrecen transporte desde el aeropuerto?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Podemos organizar transporte desde el aeropuerto bajo solicitud y por un costo adicional.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Qué pasa si dejo objetos personales en el apartamento?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Contacte a nuestro equipo de soporte lo antes posible para recuperar objetos olvidados.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Puedo recibir visitas durante mi estancia?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Sí, pero las visitas deben registrarse y cumplir con las normas de la propiedad.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Cómo modifico mi reserva?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Puede modificar su reserva desde su cuenta en nuestro sitio web o contactando a nuestro equipo de soporte.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Qué debo hacer si hay un problema con mi apartamento?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Informe cualquier problema a nuestro equipo de soporte para que podamos resolverlo rápidamente.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Las propiedades tienen acceso para personas con discapacidades?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">Algunas propiedades están equipadas para personas con discapacidades. Verifique la disponibilidad al hacer la reserva.</p>
+                </div>
+            </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <button class="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-park-cream/50 transition-colors faq-btn">
+                    <span class="font-semibold text-park-blue">¿Puedo realizar el check-in de forma anticipada?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-park-sage flex-shrink-0 transition-transform duration-300 faq-icon"></i>
+                </button>
+                <div class="faq-answer hidden px-6 pb-5">
+                    <p class="text-gray-600 leading-relaxed">El check-in anticipado está sujeto a disponibilidad y puede tener un costo adicional.</p>
+                </div>
+            </div>
+                    </div>
+    </div>
+</section>
+
+<!-- ═══ CONTACTO ══════════════════════════════════════════════════════════════ -->
+<section id="contacto" class="py-20 sm:py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-5 gap-16">
+            <div class="lg:col-span-2 reveal">
+                <span class="inline-block bg-park-sage/20 text-park-blue px-4 py-1.5 rounded-full text-sm font-semibold mb-6">Contacto</span>
+                <h2 class="font-asap text-4xl sm:text-5xl font-bold text-park-blue mb-6">¿Tienes alguna pregunta?</h2>
+                <p class="text-gray-600 text-lg leading-relaxed mb-8">Nuestro equipo está listo para ayudarte a encontrar la propiedad perfecta o resolver cualquier duda.</p>
+                <div class="space-y-4">
+                    <a href="mailto:info@parklife.mx"
+                       class="flex items-center gap-4 p-4 bg-park-cream rounded-xl hover:shadow-md transition-shadow group">
+                        <div class="w-12 h-12 bg-park-blue/10 rounded-lg flex items-center justify-center"><i data-lucide="mail" class="w-6 h-6 text-park-blue"></i></div>
+                        <div>
+                            <div class="text-xs text-gray-400 font-medium uppercase tracking-wide">Email</div>
+                            <div class="font-semibold text-park-blue group-hover:underline">info@parklife.mx</div>
+                        </div>
+                    </a>
+                                        <a href="https://wa.me/+525543481711" target="_blank"
+                       class="flex items-center gap-4 p-4 bg-park-cream rounded-xl hover:shadow-md transition-shadow group">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center"><i data-lucide="message-circle" class="w-6 h-6 text-green-600"></i></div>
+                        <div>
+                            <div class="text-xs text-gray-400 font-medium uppercase tracking-wide">WhatsApp</div>
+                            <div class="font-semibold text-park-blue group-hover:underline">Escríbenos ahora</div>
+                        </div>
+                    </a>
+                                        <div class="flex items-center gap-4 p-4 bg-park-cream rounded-xl">
+                        <div class="w-12 h-12 bg-park-blue/10 rounded-lg flex items-center justify-center"><i data-lucide="clock" class="w-6 h-6 text-park-blue"></i></div>
+                        <div>
+                            <div class="text-xs text-gray-400 font-medium uppercase tracking-wide">Horario</div>
+                            <div class="font-semibold text-park-blue">Lun – Dom · 8:00 a 22:00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-8">
+                    <a href="https://www.instagram.com/parklifeproperties" target="_blank" class="w-11 h-11 bg-park-blue/10 rounded-xl flex items-center justify-center hover:bg-park-blue hover:text-white text-park-blue transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>                    <a href="https://www.facebook.com/parklifeproperties/" target="_blank" class="w-11 h-11 bg-park-blue/10 rounded-xl flex items-center justify-center hover:bg-park-blue hover:text-white text-park-blue transition-all"><i data-lucide="facebook" class="w-5 h-5"></i></a>                    <a href="https://www.linkedin.com/company/parklifeproperties" target="_blank" class="w-11 h-11 bg-park-blue/10 rounded-xl flex items-center justify-center hover:bg-park-blue hover:text-white text-park-blue transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>                </div>
+            </div>
+
+            <div class="lg:col-span-3 reveal">
+                <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 sm:p-10">
+                    <h3 class="font-asap text-2xl font-bold text-park-blue mb-2">Solicitar Información</h3>
+                    <p class="text-gray-500 mb-8">Completa el formulario y te contactaremos pronto</p>
+                    <form id="contactForm" class="space-y-6">
+                        <input type="hidden" name="csrf_token" value="493319968ad38a068af403992bd077439ac652ec2b1deaccc54cb3c38e2c3e45">
+                        <input type="hidden" name="form_type"  value="contacto">
+                        <input type="text" name="website"       style="display:none" tabindex="-1" autocomplete="off">
+                        <input type="text" name="confirm_email" style="display:none" tabindex="-1" autocomplete="off">
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-park-blue mb-2">Nombre *</label>
+                                <input type="text" name="nombre" required placeholder="Tu nombre"
+                                       class="w-full px-4 py-3 bg-park-cream border-2 border-transparent rounded-xl focus:border-park-blue focus:bg-white outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-park-blue mb-2">Apellido *</label>
+                                <input type="text" name="apellido" required placeholder="Tu apellido"
+                                       class="w-full px-4 py-3 bg-park-cream border-2 border-transparent rounded-xl focus:border-park-blue focus:bg-white outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-park-blue mb-2">Email *</label>
+                                <input type="email" name="email" required placeholder="tu@email.com"
+                                       class="w-full px-4 py-3 bg-park-cream border-2 border-transparent rounded-xl focus:border-park-blue focus:bg-white outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-park-blue mb-2">Teléfono *</label>
+                                <input type="tel" name="telefono" required placeholder="+52 55 1234 5678"
+                                       class="w-full px-4 py-3 bg-park-cream border-2 border-transparent rounded-xl focus:border-park-blue focus:bg-white outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-park-blue mb-2">Propiedad</label>
+                                <select name="propiedad_interes"
+                                        class="w-full px-4 py-3 bg-park-cream border-2 border-transparent rounded-xl focus:border-park-blue focus:bg-white outline-none transition-all appearance-none cursor-pointer">
+                                    <option value="">Cualquier propiedad</option>
+                                                                        <optgroup label="Ciudad de México">
+                                                                                <option value="condesa">Park Life Condesa</option>
+                                                                                <option value="masaryk">Park Life Masaryk</option>
+                                                                                <option value="paradox">Park Life Santa Fe Paradox</option>
+                                                                                <option value="santa-fe">Park Life Santa Fe Siroco</option>
+                                                                                <option value="lamartine">Park Life Lamartine</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Guadalajara">
+                                                                                <option value="guadalajara">Park Life Guadalajara</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Querétaro">
+                                                                                <option value="queretaro">Park Life Queretaro</option>
+                                                                            </optgroup>
+                                                                        <optgroup label="Riviera Nayarit">
+                                                                                <option value="peninsula">Park Life Península</option>
+                                                                                <option value="nautico">Park Life Nautico</option>
+                                                                                <option value="tizate">Park Life Tizate</option>
+                                                                                <option value="narval">Park Life Narval</option>
+                                                                                <option value="bolongo">Park Life Bolongo</option>
+                                                                                <option value="orquideas">Park Life Orquideas</option>
+                                                                                <option value="san-pancho">Hotel,&lt;br&gt;Hacienda San Pancho</option>
+                                                                            </optgroup>
+                                                                    </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-park-blue mb-2">Tipo de Estancia *</label>
+                                <select name="tipo_estancia" required
+                                        class="w-full px-4 py-3 bg-park-cream border-2 border-transparent rounded-xl focus:border-park-blue focus:bg-white outline-none transition-all appearance-none cursor-pointer">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="corta">Corta (1–30 días)</option>
+                                    <option value="media">Media (1–6 meses)</option>
+                                    <option value="larga">Larga (6+ meses)</option>
+                                    <option value="permanente">Residencia Permanente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-park-blue mb-2">Mensaje (Opcional)</label>
+                            <textarea name="mensaje" rows="4" placeholder="Cuéntanos más sobre lo que buscas..."
+                                      class="w-full px-4 py-3 bg-park-cream border-2 border-transparent rounded-xl focus:border-park-blue focus:bg-white outline-none transition-all resize-none"></textarea>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" id="privacy-contact" name="privacidad_ok" required class="w-5 h-5 mt-0.5 accent-park-blue rounded">
+                            <label for="privacy-contact" class="text-sm text-gray-600">
+                                He leído y acepto la <a href="/legal" class="text-park-blue font-medium hover:underline">Política de Privacidad</a>.
+                            </label>
+                        </div>
+                        <button type="submit" id="submitBtn"
+                                class="w-full bg-park-blue text-white py-4 rounded-xl font-semibold text-lg hover:bg-park-blue-light transition-all duration-300 hover:shadow-xl flex items-center justify-center gap-2">
+                            <span class="btn-text">Enviar Solicitud</span>
+                            <span class="btn-loading hidden">
+                                <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </span>
+                            <i data-lucide="send" class="w-5 h-5 btn-icon"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    "name": "Park Life Properties",
+    "url": "https://www.parklife.mx",
+    "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.parklife.mx/pics/Logo_Parklife.png"
+    },
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+52 55 3566 8199",
+        "contactType": "customer service",
+        "availableLanguage": [
+            "Spanish",
+            "English"
+        ],
+        "areaServed": "MX"
+    },
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ciudad de México",
+        "addressCountry": "MX"
+    },
+    "sameAs": [
+        "https://www.facebook.com/parklifeproperties/",
+        "https://www.instagram.com/parklifeproperties",
+        "https://www.linkedin.com/company/parklifeproperties"
+    ],
+    "description": "Departamentos y propiedades amuebladas premium en México. Estancias cortas y mensuales en CDMX, Guadalajara, Querétaro y Riviera Nayarit.",
+    "areaServed": [
+        {
+            "@type": "City",
+            "name": "Ciudad de México"
+        },
+        {
+            "@type": "City",
+            "name": "Guadalajara"
+        },
+        {
+            "@type": "City",
+            "name": "Querétaro"
+        },
+        {
+            "@type": "State",
+            "name": "Nayarit"
+        }
+    ],
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "bestRating": "5",
+        "ratingCount": "150"
+    }
+}
+    </script>    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "¿Cuáles son los métodos de pago aceptados?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Aceptamos pagos con tarjeta de crédito, débito y algunas opciones de pago digital."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Hay un mínimo de noches para reservar?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sí, el mínimo de noches varía según la propiedad, pero generalmente es de dos noches."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Qué servicios están incluidos en la estancia?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Los servicios incluidos varían según la propiedad, pero generalmente incluyen Wi-Fi, limpieza semanal y acceso a las amenidades."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Se permite fumar en las propiedades de Park Life?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, todas nuestras propiedades son libres de humo."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Se aceptan mascotas?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Algunas de nuestras propiedades aceptan mascotas por un costo adicional. Consulte los detalles específicos al momento de la reserva."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Qué debo hacer si necesito cancelar mi reserva?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Puede cancelar su reserva desde su cuenta en nuestro sitio web o contactando a nuestro equipo de soporte."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Ofrecen servicio de limpieza?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Si ofrecemos servicio de limpieza, pregunta por nuestras diferentes modalidades."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Cómo puedo contactar al soporte de Park Life?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Puede contactarnos por correo electrónico, teléfono o mediante el chat en nuestro sitio web."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Qué debo hacer si tengo un problema durante mi estancia?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Contacte a nuestro equipo de soporte disponible las 24 horas para cualquier problema o emergencia."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Cuál es el horario de check-in y check-out?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El check-in es a las 3:00 PM y el check-out es a las 11:00 AM. Puede solicitar horarios alternativos sujetos a disponibilidad."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Qué documentos necesito para el check-in?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Necesitará un documento de identidad válido y la confirmación de su reserva."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Hay estacionamiento disponible?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "La disponibilidad de estacionamiento varía según la propiedad. Consulte los detalles de la reserva para más información."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Ofrecen transporte desde el aeropuerto?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Podemos organizar transporte desde el aeropuerto bajo solicitud y por un costo adicional."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Qué pasa si dejo objetos personales en el apartamento?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Contacte a nuestro equipo de soporte lo antes posible para recuperar objetos olvidados."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Puedo recibir visitas durante mi estancia?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sí, pero las visitas deben registrarse y cumplir con las normas de la propiedad."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Cómo modifico mi reserva?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Puede modificar su reserva desde su cuenta en nuestro sitio web o contactando a nuestro equipo de soporte."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Qué debo hacer si hay un problema con mi apartamento?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Informe cualquier problema a nuestro equipo de soporte para que podamos resolverlo rápidamente."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Las propiedades tienen acceso para personas con discapacidades?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Algunas propiedades están equipadas para personas con discapacidades. Verifique la disponibilidad al hacer la reserva."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Puedo realizar el check-in de forma anticipada?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El check-in anticipado está sujeto a disponibilidad y puede tener un costo adicional."
+            }
+        }
+    ]
+}
+    </script>
+<script>
+const destinoTexts = ["Park Life Condesa","Park Life Masaryk","Park Life Lamartine","Park Life Queretaro","Park Life Santa Fe Paradox","Park Life Guadalajara"];
+
+// Hero slideshow
+(function() {
+    const slides = document.querySelectorAll('.slide');
+    const dots   = document.querySelectorAll('.slide-dot');
+    const destEl = document.getElementById('heroDestino');
+    let cur = 0;
+    function goTo(n) {
+        if (!slides.length) return;
+        slides[cur].classList.remove('active');
+        if (dots[cur]) { dots[cur].classList.remove('w-6','bg-white'); dots[cur].classList.add('w-2','bg-white/30'); }
+        cur = (n + slides.length) % slides.length;
+        slides[cur].classList.add('active');
+        if (dots[cur]) { dots[cur].classList.add('w-6','bg-white'); dots[cur].classList.remove('w-2','bg-white/30'); }
+        if (destEl && destinoTexts[cur]) {
+            destEl.style.opacity = 0; destEl.style.transform = 'translateY(8px)'; destEl.style.transition = 'all .4s ease';
+            setTimeout(() => { destEl.textContent = destinoTexts[cur]; destEl.style.opacity = 1; destEl.style.transform = 'translateY(0)'; }, 300);
+        }
+    }
+    dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+    setInterval(() => goTo(cur + 1), 6000);
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ts = document.getElementById('leadFormTimestamp');
+    if (ts) ts.value = Math.floor(Date.now() / 1000);
+
+    const fp = flatpickr("#bk-dates", {
+        mode:"range", minDate:"today", dateFormat:"d M Y", locale:"es",
+        showMonths: window.innerWidth > 640 ? 2 : 1, disableMobile:true,
+        onChange: (dates) => {
+            if (dates.length === 2) {
+                document.getElementById("bk-checkin").value  = dates[0].toISOString().split("T")[0];
+                document.getElementById("bk-checkout").value = dates[1].toISOString().split("T")[0];
+            }
+        }
+    });
+    if (document.getElementById("bk-dates")) document.getElementById("bk-dates")._flatpickr = fp;
+
+    document.querySelectorAll('.faq-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const answer = btn.nextElementSibling;
+            const icon   = btn.querySelector('.faq-icon');
+            const isOpen = !answer.classList.contains('hidden');
+            document.querySelectorAll('.faq-answer').forEach(a => a.classList.add('hidden'));
+            document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = '');
+            if (!isOpen) { answer.classList.remove('hidden'); if (icon) icon.style.transform = 'rotate(180deg)'; }
+        });
+    });
+});
+
+function submitLead(e) {
+    e.preventDefault();
+    const form = document.getElementById("widgetMonths");
+    const btn  = document.getElementById("leadSubmitBtn");
+    const bt   = btn?.querySelector(".btn-text");
+    const bl   = btn?.querySelector(".btn-loading");
+    const bi   = btn?.querySelector(".btn-icon");
+    const propId = document.getElementById("bk-prop-months")?.selectedOptions[0]?.dataset?.id || "0";
+    if (bt) bt.textContent = "Enviando...";
+    bl?.classList.remove("hidden"); bi?.classList.add("hidden");
+    if (btn) btn.disabled = true;
+    const fd = new FormData(form);
+    fd.append("propiedad_id", propId);
+    fetch("/api/send-lead.php", { method:"POST", body:fd })
+        .then(r => r.json())
+        .then(d => {
+            if (d.success) { Swal.fire({ icon:"success", title:"¡Listo!", text:"Recibimos tu solicitud. Te contactamos en menos de 2 hrs.", confirmButtonColor:"#202944", timer:5000, timerProgressBar:true }); form.reset(); }
+            else            { Swal.fire({ icon:"error", title:"Error", text: d.message || "Hubo un problema.", confirmButtonColor:"#202944" }); }
+        })
+        .catch(() => Swal.fire({ icon:"error", title:"Sin conexión", text:"No se pudo enviar. Intenta de nuevo.", confirmButtonColor:"#202944" }))
+        .finally(() => { if (bt) bt.textContent="Cotizar"; bl?.classList.add("hidden"); bi?.classList.remove("hidden"); if (btn) btn.disabled=false; });
+}
+</script>
+
+
+<!-- FOOTER -->
+<footer class="bg-park-blue text-white pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+
+            <!-- Columna 1: Marca -->
+            <div>
+                <img src="pics/Logo_ParkLife_Blanco.png"
+                     alt="Park Life Properties" class="h-10 w-auto mb-6"
+                     onerror="this.outerHTML='<p class=\'font-asap text-2xl font-bold text-white mb-6\'>PARK LIFE</p>'">
+                <p class="text-white/60 text-sm leading-relaxed mb-6">
+                    Redefiniendo el concepto de vida premium en México.<br>Desde una noche hasta toda la vida.
+                </p>
+                <div class="flex gap-3">
+                                        <a href="https://www.facebook.com/parklifeproperties/" target="_blank" rel="noopener"
+                       class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-park-sage hover:text-park-blue transition-all">
+                        <i data-lucide="facebook" class="w-5 h-5"></i>
+                    </a>
+                                                            <a href="https://www.instagram.com/parklifeproperties" target="_blank" rel="noopener"
+                       class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-park-sage hover:text-park-blue transition-all">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                                                            <a href="https://www.linkedin.com/company/parklifeproperties" target="_blank" rel="noopener"
+                       class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-park-sage hover:text-park-blue transition-all">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                                    </div>
+            </div>
+
+            <!-- Columnas 2 & 3: Propiedades por destino -->
+                        <div>
+                                <h4 class="font-asap font-semibold text-lg mb-4">Ciudad de México</h4>
+                <ul class="space-y-2 text-sm text-white/60 mb-6">
+                                        <li><a href="/condesa" class="hover:text-park-sage transition-colors">Park Life Condesa</a></li>
+                                        <li><a href="/masaryk" class="hover:text-park-sage transition-colors">Park Life Masaryk</a></li>
+                                        <li><a href="/paradox" class="hover:text-park-sage transition-colors">Park Life Santa Fe Paradox</a></li>
+                                        <li><a href="/santa-fe" class="hover:text-park-sage transition-colors">Park Life Santa Fe Siroco</a></li>
+                                        <li><a href="/lamartine" class="hover:text-park-sage transition-colors">Park Life Lamartine</a></li>
+                                    </ul>
+                                <h4 class="font-asap font-semibold text-lg mb-4">Guadalajara</h4>
+                <ul class="space-y-2 text-sm text-white/60 mb-6">
+                                        <li><a href="/guadalajara" class="hover:text-park-sage transition-colors">Park Life Guadalajara</a></li>
+                                    </ul>
+                            </div>
+            <div>
+                                <h4 class="font-asap font-semibold text-lg mb-4">Querétaro</h4>
+                <ul class="space-y-2 text-sm text-white/60 mb-6">
+                                        <li><a href="/queretaro" class="hover:text-park-sage transition-colors">Park Life Queretaro</a></li>
+                                    </ul>
+                                <h4 class="font-asap font-semibold text-lg mb-4">Riviera Nayarit</h4>
+                <ul class="space-y-2 text-sm text-white/60 mb-6">
+                                        <li><a href="/peninsula" class="hover:text-park-sage transition-colors">Park Life Península</a></li>
+                                        <li><a href="/nautico" class="hover:text-park-sage transition-colors">Park Life Nautico</a></li>
+                                        <li><a href="/tizate" class="hover:text-park-sage transition-colors">Park Life Tizate</a></li>
+                                        <li><a href="/narval" class="hover:text-park-sage transition-colors">Park Life Narval</a></li>
+                                        <li><a href="/bolongo" class="hover:text-park-sage transition-colors">Park Life Bolongo</a></li>
+                                        <li><a href="/orquideas" class="hover:text-park-sage transition-colors">Park Life Orquideas</a></li>
+                                        <li><a href="/san-pancho" class="hover:text-park-sage transition-colors">Hotel,&lt;br&gt;Hacienda San Pancho</a></li>
+                                    </ul>
+                                <!-- Links Park Life -->
+                <h4 class="font-asap font-semibold text-lg mb-4">Park Life</h4>
+                <ul class="space-y-2 text-sm text-white/60">
+                    <li><a href="/#prensa"        class="hover:text-park-sage transition-colors">Prensa</a></li>
+                    <li><a href="/#nosotros"       class="hover:text-park-sage transition-colors">Nosotros</a></li>
+                    <li><a href="/#bolsa-trabajo"  class="hover:text-park-sage transition-colors">Bolsa de Trabajo</a></li>
+                    <li><a href="/#contacto"       class="hover:text-park-sage transition-colors">Contacto</a></li>
+                    <li><a href="/legal"           class="hover:text-park-sage transition-colors">Política de Privacidad</a></li>
+                    <li><a href="/terminos"        class="hover:text-park-sage transition-colors">Términos y Condiciones</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bottom bar -->
+        <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p class="text-white/40 text-sm">© 2026 Park Life Properties. Todos los derechos reservados.</p>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                <span class="text-white/40 text-sm">14 propiedades disponibles</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ── Strings traducibles para JavaScript ──────────────────────────────────
+     DeepL traduce este bloque junto con el resto del HTML.
+     JS los lee del DOM con str('clave') — nunca hardcoded en <script>.
+─────────────────────────────────────────────────────────────────────────── -->
+<div id="js-i18n" aria-hidden="true" style="display:none;position:absolute;overflow:hidden;height:0">
+    <span data-k="cuando_donde">¿Cuándo y dónde?</span>
+    <span data-k="cotizar_mensual">Cotizar renta mensual</span>
+    <span data-k="fechas_titulo">Selecciona las fechas</span>
+    <span data-k="fechas_texto">Elige tu fecha de llegada y salida.</span>
+    <span data-k="propiedad_titulo">Selecciona una propiedad</span>
+    <span data-k="propiedad_texto">Elige el destino que te interesa para cotizar.</span>
+    <span data-k="enviando">Enviando...</span>
+    <span data-k="exito">¡Listo!</span>
+    <span data-k="error_envio">Hubo un problema.</span>
+    <span data-k="error_titulo">Error de conexión</span>
+    <span data-k="sin_conexion">No se pudo conectar. Intenta de nuevo.</span>
+    <span data-k="enviar">Enviar Solicitud</span>
+    <span data-k="live">en vivo</span>
+    <span data-k="actualizado">Actualizado</span>
+    <span data-k="success_contacto">Gracias por tu interés. Te contactaremos pronto.</span>
+    <span data-k="success_bolsa">Revisaremos tu solicitud y te contactaremos si hay match.</span>
+</div>
+
+<!-- ── JS Global ──────────────────────────────────────────────────────────── -->
+<script>
+/** Lee un string traducido del DOM (DeepL ya lo procesó junto con el HTML) */
+function str(k) {
+    return document.querySelector('#js-i18n [data-k="' + k + '"]')?.textContent?.trim() || k;
+}
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        document.getElementById("loader")?.classList.add("hidden");
+        lucide.createIcons();
+        initReveal();
+    }, 800);
+});
+
+// ── Navbar ──
+const navbar        = document.getElementById("navbar");
+const logoWhite     = document.getElementById("logo-white");
+const logoBlue      = document.getElementById("logo-blue");
+const navLinks      = document.querySelectorAll(".nav-link");
+const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+const mobileMenu    = document.getElementById("mobile-menu");
+
+window.addEventListener("scroll", () => {
+    const scrolled = window.scrollY > 80;
+    navbar.classList.toggle("bg-white",    scrolled);
+    navbar.classList.toggle("shadow-lg",   scrolled);
+    navbar.classList.toggle("navbar-blur", scrolled);
+    logoWhite?.classList.toggle("hidden",  scrolled);
+    logoBlue?.classList.toggle("hidden",   !scrolled);
+    navLinks.forEach(l => l.style.color = scrolled ? "#202944" : "");
+    if (mobileMenuBtn) mobileMenuBtn.style.color = scrolled ? "#202944" : "white";
+    handleStickyBooking();
+});
+
+mobileMenuBtn?.addEventListener("click", () => mobileMenu?.classList.toggle("hidden"));
+mobileMenu?.querySelectorAll("a").forEach(a => a.addEventListener("click", () => mobileMenu.classList.add("hidden")));
+
+// ── Sticky Booking ──
+const bookingHeroWrapper = document.getElementById("bookingHeroWrapper");
+let bookingOrigTop = null;
+
+function handleStickyBooking() {
+    if (!bookingHeroWrapper) return;
+    if (!bookingOrigTop) bookingOrigTop = bookingHeroWrapper.getBoundingClientRect().top + window.scrollY;
+    if (window.scrollY > bookingOrigTop + bookingHeroWrapper.offsetHeight) {
+        bookingHeroWrapper.classList.add("is-sticky");
+        document.body.classList.add("booking-sticky");
+    } else {
+        bookingHeroWrapper.classList.remove("is-sticky", "is-expanded");
+        document.body.classList.remove("booking-sticky");
+    }
+}
+
+function toggleMobileBooking() {
+    document.getElementById("bookingHeroWrapper")?.classList.toggle("is-expanded");
+    lucide.createIcons();
+}
+
+function expandOnMobile() {
+    const w = document.getElementById("bookingHeroWrapper");
+    if (w?.classList.contains("is-sticky") && window.innerWidth < 1024) {
+        w.classList.toggle("is-expanded");
+    }
+}
+
+// ── Booking Engine ──
+let bkPlayzo = "days";
+
+function setPlayzo(mode) {
+    const w = document.getElementById("bookingHeroWrapper");
+    if (w?.classList.contains("is-sticky") && window.innerWidth < 1024) {
+        const alreadyExpanded = w.classList.contains("is-expanded");
+        if (mode === bkPlayzo && alreadyExpanded) { w.classList.remove("is-expanded"); return; }
+        w.classList.add("is-expanded");
+    }
+    bkPlayzo = mode;
+    const btnD  = document.getElementById("toggleDays");
+    const btnM  = document.getElementById("toggleMonths");
+    const wD    = document.getElementById("widgetDays");
+    const wM    = document.getElementById("widgetMonths");
+    const isDays = mode === "days";
+    if (isDays) {
+        btnD.style.cssText = "background:rgba(255,255,255,0.95);color:#202944;box-shadow:0 2px 8px rgba(0,0,0,.15)";
+        btnM.style.cssText = "color:rgba(255,255,255,0.65)";
+    } else {
+        btnM.style.cssText = "background:rgba(255,255,255,0.95);color:#202944;box-shadow:0 2px 8px rgba(0,0,0,.15)";
+        btnD.style.cssText = "color:rgba(255,255,255,0.65)";
+    }
+    wD?.classList.toggle("hidden", !isDays);
+    wM?.classList.toggle("hidden", isDays);
+    document.getElementById("mobileCollapsedLabel").textContent = isDays ? str("cuando_donde") : str("cotizar_mensual");
+    lucide.createIcons();
+}
+
+function bkInc() { const i = document.getElementById("bk-guests"); if (+i.value < 10) i.value = +i.value + 1; }
+function bkDec() { const i = document.getElementById("bk-guests"); if (+i.value > 1)  i.value = +i.value - 1; }
+
+function bkSearch() {
+    const prop   = document.getElementById("bk-property")?.value;
+    const guests = document.getElementById("bk-guests")?.value || 2;
+    const cloudbedsMap = {"default":"i5lEbX","guadalajara":"b5VW89","condesa":"i5lEbX","masaryk":"gKEVs8","santa-fe":"1aK9io","san-pancho":"Iuw7Gq","lamartine":"b5VW89"};
+    const code = cloudbedsMap[prop] || cloudbedsMap['default'] || 'i5lEbX';
+    if (bkPlayzo === "days") {
+        const ci = document.getElementById("bk-checkin")?.value;
+        const co = document.getElementById("bk-checkout")?.value;
+        if (!ci || !co) {
+            Swal.fire({ icon:"info", title:str("fechas_titulo"), text:str("fechas_texto"), confirmButtonColor:"#202944" });
+            document.getElementById("bk-dates")?._flatpickr?.open();
+            return;
+        }
+        window.open(`https://hotels.cloudbeds.com/reservation/${code}?checkin=${ci}&checkout=${co}&adults=${guests}`, "_blank");
+    } else {
+        if (!prop) {
+            Swal.fire({ icon:"info", title:str("propiedad_titulo"), text:str("propiedad_texto"), confirmButtonColor:"#202944" });
+            return;
+        }
+        const mascota   = document.getElementById("bk-mascota")?.checked  ? "sí" : "no";
+        const amueblado = document.getElementById("bk-amueblado")?.checked ? "sí" : "no";
+        const params    = new URLSearchParams({ mascota, amueblado, tipo:"mensual" });
+        window.location.href = `/${prop}?${params.toString()}#cotizar`;
+    }
+}
+
+function launchCloudbeds() {
+    window.open('https://hotels.cloudbeds.com/reservation/i5lEbX', '_blank');
+}
+
+function filterProperties(dest, btn) {
+    document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".property-card").forEach(c => {
+        const show = dest === "all" || c.dataset.dest === dest;
+        c.style.display = show ? "" : "none";
+        if (show) setTimeout(() => c.classList.add("active"), 10);
+    });
+}
+
+function initReveal() {
+    const obs = new IntersectionObserver(
+        entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("active"); obs.unobserve(e.target); } }),
+        { threshold:.1, rootMargin:"0px 0px -50px 0px" }
+    );
+    document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
+}
+
+function handleFormSubmit(fid, bid, msg, endpoint) {
+    const form = document.getElementById(fid);
+    if (!form) return;
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const btn = document.getElementById(bid);
+        const bt  = btn?.querySelector(".btn-text");
+        const bl  = btn?.querySelector(".btn-loading");
+        const bi  = btn?.querySelector(".btn-icon");
+        if (bt) bt.textContent = str("enviando");
+        bl?.classList.remove("hidden"); bi?.classList.add("hidden");
+        if (btn) btn.disabled = true;
+        fetch(endpoint || "/api/contact.php", { method:"POST", body:new FormData(this) })
+            .then(r => r.json())
+            .then(d => {
+                if (d.success) { Swal.fire({ icon:"success", title:str("exito"), text:msg, confirmButtonColor:"#202944", timer:5000, timerProgressBar:true }); this.reset(); }
+                else            { Swal.fire({ icon:"error", title:"Error", text:d.message||str("error_envio"), confirmButtonColor:"#202944" }); }
+            })
+            .catch(() => Swal.fire({ icon:"error", title:str("error_titulo"), text:str("sin_conexion"), confirmButtonColor:"#202944" }))
+            .finally(() => { if (bt) bt.textContent=str("enviar"); bl?.classList.add("hidden"); bi?.classList.remove("hidden"); if (btn) btn.disabled=false; });
+    });
+}
+
+handleFormSubmit("contactForm",  "submitBtn",   str("success_contacto"), "/api/contact.php");
+handleFormSubmit("jobForm",      "jobSubmitBtn",str("success_bolsa"),    "/api/contact.php");
+</script>
+</body>
+</html>
