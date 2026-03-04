@@ -61,6 +61,13 @@ foreach ($habitaciones as &$hab) {
 }
 unset($hab);
 
+// Calcular precio mensual desde habitaciones (source of truth)
+$preciosMes = array_filter(array_column($habitaciones, 'precio_mes_12'), fn($p) => $p > 0);
+if (!empty($preciosMes)) {
+    $propiedad['precio_desde_mes'] = min($preciosMes);
+}
+
+
 $imagenes = dbFetchAll(
     "SELECT * FROM propiedad_imagenes WHERE propiedad_id = ? AND activa = 1 ORDER BY tipo, orden, id",
     [$propId]
@@ -584,8 +591,10 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
                     </div>
                     <?php endif; ?>
                     <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium text-park-blue">
-                        <?php if ($hab['precio_mes_1']): ?>
-                            <?= s('prop.desde') ?> <?= formatPrice((float)$hab['precio_mes_1']) ?>/<?= s('prop.mes_suf') ?>
+                        <?php 
+                        $precioMesHab = $hab['precio_mes_12'] ?: $hab['precio_mes_6'] ?: $hab['precio_mes_1'];
+                        if ($precioMesHab): ?>
+                            <?= s('prop.desde') ?> <?= formatPrice((float)$precioMesHab) ?>/<?= s('prop.mes_suf') ?>
                         <?php else: ?>
                             <?= e($precioNoche) ?>
                         <?php endif; ?>
@@ -639,8 +648,25 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
 </section>
 <?php endif; ?>
 
-<!-- ═══ GALERÍA ══════════════════════════════════════════════════════════════ -->
-<?php if (!empty($imgGaleria)): ?>
+
+<!-- ═══ GALERÍA — MASONRY ALEATORIO ══════════════════════════════════════ -->
+<?php if (!empty($imgGaleria)):
+    // Aleatorizar orden en cada carga
+    shuffle($imgGaleria);
+
+    // Patrón de alturas variadas que se repite — da aspecto orgánico
+    $sizePatterns = [
+        ['h' => 'h-72 md:h-80', 'p' => 'p-5'],  // tall
+        ['h' => 'h-48 md:h-56', 'p' => 'p-4'],  // medium
+        ['h' => 'h-56 md:h-64', 'p' => 'p-4'],  // medium-tall
+        ['h' => 'h-44 md:h-52', 'p' => 'p-4'],  // short-medium
+        ['h' => 'h-64 md:h-72', 'p' => 'p-5'],  // tall
+        ['h' => 'h-52 md:h-60', 'p' => 'p-4'],  // medium
+        ['h' => 'h-40 md:h-48', 'p' => 'p-4'],  // short
+        ['h' => 'h-60 md:h-72', 'p' => 'p-5'],  // tall
+    ];
+    shuffle($sizePatterns);
+?>
 <section id="galeria" class="py-20 sm:py-28 bg-park-cream">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16 reveal">
@@ -648,21 +674,53 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
             <h2 class="font-asap text-4xl sm:text-5xl font-bold text-park-blue mb-6"><?= s('prop.galeria_sub') ?></h2>
             <p class="text-gray-600 text-lg leading-relaxed"><?= s('prop.galeria_desc') ?></p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
+
+        <!-- Masonry con CSS columns -->
+        <style>
+            .masonry-gallery {
+                columns: 2;
+                column-gap: 1rem;
+            }
+            @media (min-width: 768px) {
+                .masonry-gallery { columns: 3; column-gap: 1.25rem; }
+            }
+            @media (min-width: 1024px) {
+                .masonry-gallery { columns: 4; column-gap: 1.25rem; }
+            }
+            .masonry-gallery .masonry-item {
+                break-inside: avoid;
+                margin-bottom: 1rem;
+            }
+            @media (min-width: 768px) {
+                .masonry-gallery .masonry-item { margin-bottom: 1.25rem; }
+            }
+            .masonry-item .gallery-overlay {
+                opacity: 0;
+                transition: opacity .35s ease;
+            }
+            .masonry-item:hover .gallery-overlay {
+                opacity: 1;
+            }
+            .masonry-item:hover img {
+                transform: scale(1.05);
+            }
+        </style>
+
+        <div class="masonry-gallery reveal">
             <?php foreach ($imgGaleria as $i => $img):
-                $isFirst = $i === 0;
                 $altText = $img['alt'] ?: $propiedad['nombre'];
+                $pattern = $sizePatterns[$i % count($sizePatterns)];
+                $height  = $pattern['h'];
+                $pad     = $pattern['p'];
             ?>
-            <div class="<?= $isFirst ? 'col-span-2 row-span-2' : '' ?> gallery-item relative <?= $isFirst ? 'min-h-[400px]' : 'h-48 md:h-auto' ?>">
-                <img src="<?= e($img['url']) ?>" alt="<?= e($altText) ?>" class="w-full h-full object-cover">
-                <div class="gallery-overlay absolute inset-0 bg-gradient-to-t from-park-blue/80 to-transparent opacity-0 transition-opacity duration-300 flex items-end <?= $isFirst ? 'p-6' : 'p-4' ?>">
+            <div class="masonry-item gallery-item relative <?= $height ?> rounded-2xl overflow-hidden cursor-pointer"
+                 onclick="abrirGaleriaLightbox(<?= $i ?>)">
+                <img src="/<?= e($img['url']) ?>" alt="<?= e($altText) ?>"
+                     class="w-full h-full object-cover transition-transform duration-700"
+                     loading="lazy">
+                <div class="gallery-overlay absolute inset-0 bg-gradient-to-t from-park-blue/80 via-transparent to-transparent flex items-end <?= $pad ?>">
                     <div class="text-white">
-                        <?php if ($isFirst): ?>
-                        <h4 class="font-asap text-xl font-bold"><?= e($altText) ?></h4>
-                        <p class="text-white/80 text-sm"><?= e($propiedad['colonia'] ?? '') ?></p>
-                        <?php else: ?>
-                        <h4 class="font-semibold text-sm"><?= e($altText) ?></h4>
-                        <?php endif; ?>
+                        <h4 class="font-semibold text-sm drop-shadow-md"><?= e($altText) ?></h4>
                     </div>
                 </div>
             </div>
@@ -670,7 +728,83 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
         </div>
     </div>
 </section>
+
+<!-- Lightbox de galería general -->
+<script>
+(function(){
+    const _galeriaImgs = <?= json_encode(array_map(fn($img) => [
+        'url' => $img['url'],
+        'alt' => $img['alt'] ?: $propiedad['nombre']
+    ], $imgGaleria), JSON_HEX_TAG | JSON_HEX_APOS | JSON_UNESCAPED_UNICODE) ?>;
+
+    let _gCur = 0;
+
+    window.abrirGaleriaLightbox = function(idx) {
+        // Reusar el lightbox de habitaciones si existe
+        const lb = document.getElementById('hab-lightbox');
+        if (!lb) return;
+
+        // Inyectar las imágenes de galería en el sistema de lightbox
+        window._galeria_temp = _galeriaImgs;
+        _gCur = idx;
+
+        const img     = document.getElementById('lb-img');
+        const counter = document.getElementById('lb-counter');
+        const thumbs  = document.getElementById('lb-thumbs');
+        const prev    = document.getElementById('lb-prev');
+        const next    = document.getElementById('lb-next');
+
+        function render() {
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = '/' + _galeriaImgs[_gCur].url;
+                img.alt = _galeriaImgs[_gCur].alt || '';
+                img.style.opacity = '1';
+            }, 150);
+            counter.textContent = (_gCur + 1) + ' / ' + _galeriaImgs.length;
+            prev.style.display = _galeriaImgs.length > 1 ? 'flex' : 'none';
+            next.style.display = _galeriaImgs.length > 1 ? 'flex' : 'none';
+
+            if (_galeriaImgs.length > 1) {
+                thumbs.innerHTML = _galeriaImgs.map((im, i) =>
+                    '<div onclick="event.stopPropagation();window._galNavTo(' + i + ')" '
+                    + 'style="width:56px;height:40px;flex-shrink:0;border-radius:.4rem;overflow:hidden;cursor:pointer;'
+                    + 'border:2px solid ' + (i === _gCur ? '#BAC4B9' : 'transparent') + ';transition:all .2s;opacity:' + (i === _gCur ? '1' : '.5') + '">'
+                    + '<img src="/' + im.url + '" style="width:100%;height:100%;object-fit:cover">'
+                    + '</div>'
+                ).join('');
+            } else {
+                thumbs.innerHTML = '';
+            }
+        }
+
+        // Override nav temporarily
+        window._galNavTo = function(i) { _gCur = i; render(); };
+
+        const origNav = window.lightboxNav;
+        const origClose = window.cerrarLightbox;
+
+        window.lightboxNav = function(dir) {
+            _gCur = (_gCur + dir + _galeriaImgs.length) % _galeriaImgs.length;
+            render();
+        };
+
+        window.cerrarLightbox = function() {
+            lb.style.display = 'none';
+            document.body.style.overflow = '';
+            // Restaurar funciones originales
+            window.lightboxNav = origNav;
+            window.cerrarLightbox = origClose;
+        };
+
+        render();
+        lb.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    };
+})();
+</script>
 <?php endif; ?>
+
 
 <!-- ═══ AMENIDADES ═══════════════════════════════════════════════════════════ -->
 <?php if (!empty($amenidades)): ?>

@@ -21,9 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $result = attemptLogin($email, $password);
     if ($result['success']) {
-        header('Location: index.php'); exit;
+        $redirect = getFirstAccessiblePage();
+        header('Location: ' . $redirect); exit;
     }
-    $error = $result['message'] ?? 'Credenciales incorrectas.';
+    $error = $result['error'] ?? 'Credenciales incorrectas.';
 }
 ?>
 <!DOCTYPE html>
@@ -67,7 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pk/30 focus:border-pk transition-all">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Contraseña</label>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+                        <a href="reset-password.php" class="text-xs text-gray-400 hover:text-pk transition-colors">¿Olvidaste tu contraseña?</a>
+                    </div>
                     <div class="relative">
                         <input type="password" name="password" id="pwd" required
                                placeholder="••••••••"

@@ -161,13 +161,34 @@ function dbVal(array $row, string $campo, string $default = ''): string
 function getPropiedadesActivas(): array
 {
     return dbCache('propiedades_activas', function () {
-        return dbFetchAll(
-            "SELECT p.*, d.slug AS destino_slug, d.nombre AS destino_nombre
+        $props = dbFetchAll(
+            "SELECT p.*, d.slug AS destino_slug, d.nombre AS destino_nombre,
+                    (SELECT MIN(h.precio_mes_12) 
+                     FROM habitaciones h 
+                     WHERE h.propiedad_id = p.id 
+                       AND h.activa = 1 
+                       AND h.precio_mes_12 > 0
+                    ) AS precio_min_hab,
+                    (SELECT pi.url 
+                     FROM propiedad_imagenes pi 
+                     WHERE pi.propiedad_id = p.id 
+                       AND pi.tipo = 'card' 
+                       AND pi.activa = 1 
+                     ORDER BY pi.es_portada DESC, pi.orden ASC 
+                     LIMIT 1
+                    ) AS card_image
              FROM propiedades p
              LEFT JOIN destinos d ON d.id = p.destino_id
              WHERE p.activo = 1
              ORDER BY p.orden ASC, p.nombre ASC"
         );
+        foreach ($props as &$p) {
+            if (!empty($p['precio_min_hab'])) {
+                $p['precio_desde_mes'] = $p['precio_min_hab'];
+            }
+        }
+        unset($p);
+        return $props;
     });
 }
 

@@ -63,16 +63,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         adminRedirect("imagenes.php?propiedad_id=$propId", 'success', 'Imagen actualizada.');
     }
 
-    if ($postAction === 'delete') {
+if ($postAction === 'delete') {
         $imgId = (int)$_POST['img_id'];
         $img   = dbFetchOne("SELECT url FROM propiedad_imagenes WHERE id=? AND propiedad_id=?", [$imgId, $propId]);
         if ($img) {
-            $file = __DIR__ . '/../' . $img['url'];
-            if (file_exists($file)) @unlink($file);
             dbExecute("DELETE FROM propiedad_imagenes WHERE id=?", [$imgId]);
+            // Solo borrar archivo si ningún otro registro lo usa
+            $enUso = (int)dbFetchValue(
+                "SELECT COUNT(*) FROM propiedad_imagenes WHERE url = ?", 
+                [$img['url']]
+            );
+            if ($enUso === 0) {
+                $file = __DIR__ . '/../' . $img['url'];
+                if (file_exists($file)) @unlink($file);
+            }
             dbCacheInvalidate();
         }
-        adminRedirect("imagenes.php?propiedad_id=$propId", 'success', 'Imagen eliminada.');
+        adminRedirect("imagenes.php?propiedad_id=$propId", 'success', 'Registro eliminado.');
     }
 
     // Limpiar registros con archivos inexistentes

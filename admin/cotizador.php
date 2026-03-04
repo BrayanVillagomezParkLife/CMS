@@ -10,7 +10,10 @@ declare(strict_types=1);
  *       1–2 meses → tarifa 1m
  *   - Mantenimiento siempre incluido (no se desactiva).
  *   - Descuento aplica SOLO sobre renta neta.
+ *   - Si hay descuento > 0%, la cotización queda PENDIENTE DE AUTORIZACIÓN.
  *   - Cada agente ve solo sus cotizaciones; admin (role=superadmin) ve todas.
+ *
+ * v2.0 — Email por SMTP + Workflow de aprobación de descuentos
  */
 
 require_once __DIR__ . '/includes/middleware.php';
@@ -22,6 +25,10 @@ $adminId    = (int)($_SESSION['admin_id'] ?? 0);
 $adminRole  = $_SESSION['admin_role'] ?? 'editor';
 $propiedades = dbFetchAll("SELECT id, nombre FROM propiedades WHERE activo=1 ORDER BY nombre");
 $baseUrl = rtrim(($_SERVER['REQUEST_SCHEME'] ?? 'https') . '://' . ($_SERVER['HTTP_HOST'] ?? 'parklife.mx'), '/');
+
+// ═════════════════════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ═════════════════════════════════════════════════════════════════════════════
 
 /** Build rich WhatsApp message with full breakdown */
 function buildWaMsg(array $c, string $baseUrl): string {
@@ -57,6 +64,116 @@ function buildWaMsg(array $c, string $baseUrl): string {
     $lines[] = "";
     $lines[] = "Quedo a tus órdenes para cualquier duda. 🙂";
     return implode("\n", $lines);
+}
+
+/** HTML del email de cotización (enviado por SMTP al cliente) */
+function buildQuoteEmailHtml(array $c, string $baseUrl): string
+{
+    $f = fn($v) => '$' . number_format((float)$v, 2);
+    $nombre = htmlspecialchars($c['cliente_nombre'] ?: 'Cliente');
+    $tokenUrl = !empty($c['token_publico']) ? $baseUrl . '/cotizacion.php?t=' . $c['token_publico'] : '';
+
+    $html = '<div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;color:#374151">';
+    $html .= '<div style="background:#202944;padding:24px;text-align:center;border-radius:12px 12px 0 0">';
+    $html .= '<h1 style="color:#fff;margin:0;font-size:20px">Tu Cotización Park Life</h1>';
+    $html .= '<p style="color:rgba(255,255,255,.6);margin:4px 0 0;font-size:13px">'
+           . htmlspecialchars($c['prop_nombre']) . ' · ' . htmlspecialchars($c['hab_nombre']) . '</p></div>';
+    $html .= '<div style="padding:24px;background:#fff;border:1px solid #e5e7eb">';
+    $html .= "<p>Hola <strong>{$nombre}</strong>,</p>";
+    $html .= '<p>Aquí tienes el detalle de tu cotización:</p>';
+    $html .= '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:16px 0">';
+
+    $rows = [['Renta base', $f($c['precio_renta_base'])]];
+    if ((float)$c['descuento_porcentaje'] > 0)
+        $rows[] = ["Descuento ({$c['descuento_porcentaje']}%)", '-' . $f($c['descuento_monto'])];
+    $rows[] = ['<strong>Renta neta</strong>', '<strong>' . $f($c['precio_renta_neta']) . '</strong>'];
+    if ((float)$c['monto_mantenimiento'] > 0) $rows[] = ['Mantenimiento', $f($c['monto_mantenimiento'])];
+    if ($c['inc_servicios'] && (float)$c['monto_servicios'] > 0) $rows[] = ['Servicios', $f($c['monto_servicios'])];
+    if ($c['inc_amueblado'] && (float)$c['monto_amueblado'] > 0) $rows[] = ['Amueblado', $f($c['monto_amueblado'])];
+    if ($c['inc_parking'] && (float)$c['monto_parking'] > 0) $rows[] = ['Estacionamiento', $f($c['monto_parking'])];
+    if ($c['inc_mascota'] && (float)$c['monto_mascota'] > 0) $rows[] = ['Mascota', $f($c['monto_mascota'])];
+    if ((float)($c['monto_iva'] ?? 0) > 0) $rows[] = ['IVA (' . ($c['iva_porcentaje'] ?? 16) . '%)', $f($c['monto_iva'])];
+
+    foreach ($rows as $r) {
+        $html .= '<tr><td style="padding:8px 12px;border-bottom:1px solid #f3f4f6">' . $r[0]
+               . '</td><td style="padding:8px 12px;border-bottom:1px solid #f3f4f6;text-align:right">' . $r[1] . '</td></tr>';
+    }
+    $html .= '<tr style="background:#202944;color:#fff"><td style="padding:12px;font-weight:700">TOTAL MENSUAL</td>';
+    $html .= '<td style="padding:12px;text-align:right;font-weight:700;font-size:18px">' . $f($c['subtotal_mensual']) . ' MXN</td></tr>';
+    $html .= '</table>';
+    $html .= '<div style="background:#f8fafc;padding:16px;border-radius:8px;text-align:center;margin:16px 0">';
+    $html .= '<div style="font-size:12px;color:#6b7280">Total contrato (' . $c['duracion_meses'] . ' meses)</div>';
+    $html .= '<div style="font-size:24px;font-weight:700;color:#202944">' . $f($c['total_contrato']) . ' MXN</div></div>';
+    if ($tokenUrl) {
+        $html .= '<div style="text-align:center;margin:20px 0">';
+        $html .= '<a href="' . $tokenUrl . '" style="display:inline-block;background:#202944;color:#fff;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:600">Ver cotización completa</a></div>';
+    }
+    $html .= '<p style="font-size:12px;color:#9ca3af;text-align:center">Precios en MXN. Cotización informativa, no constituye un contrato.</p>';
+    $html .= '</div></div>';
+    return $html;
+}
+
+/** Enviar solicitud de autorización de descuento al Director Comercial */
+function enviarSolicitudDescuento(int $cotId, array $data, ?string $token = null): void
+{
+    require_once __DIR__ . '/../services/MailService.php';
+    $mailSvc = new MailService();
+
+    $token = $token ?? $data['autorizacion_token'] ?? '';
+    $baseUrl = rtrim(($_SERVER['REQUEST_SCHEME'] ?? 'https') . '://'
+             . ($_SERVER['HTTP_HOST'] ?? 'parklife.mx'), '/');
+    $approveUrl = $baseUrl . '/admin/aprobar-descuento.php?token=' . $token . '&accion=aprobar';
+    $rejectUrl  = $baseUrl . '/admin/aprobar-descuento.php?token=' . $token . '&accion=rechazar';
+
+    $agente = $_SESSION['admin_nombre'] ?? $_SESSION['admin_email'] ?? 'Agente';
+    $prop = dbFetchOne("SELECT nombre FROM propiedades WHERE id=?", [(int)$data['propiedad_id']]);
+    $hab  = dbFetchOne("SELECT nombre, codigo FROM habitaciones WHERE id=?", [(int)$data['habitacion_id']]);
+
+    $f = fn($v) => '$' . number_format((float)$v, 2);
+    $descPct = $data['descuento_porcentaje'];
+    $emailAprobador = cfg('email_aprobador_descuentos', 'brayan.villagomez@parklife.mx');
+
+    $html = '<div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif">';
+    $html .= '<div style="background:#DC2626;padding:20px;text-align:center;border-radius:12px 12px 0 0">';
+    $html .= '<h1 style="color:#fff;margin:0;font-size:18px">🔔 Solicitud de Descuento</h1>';
+    $html .= '<p style="color:rgba(255,255,255,.8);margin:4px 0 0;font-size:13px">Cotización #' . $cotId . ' requiere tu aprobación</p></div>';
+    $html .= '<div style="padding:24px;background:#fff;border:1px solid #e5e7eb">';
+    $html .= '<p><strong>' . htmlspecialchars($agente) . '</strong> ha generado una cotización con descuento del <strong style="color:#DC2626;font-size:18px">' . $descPct . '%</strong></p>';
+
+    $html .= '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:16px 0">';
+    $tableRows = [
+        ['Cliente',       htmlspecialchars($data['cliente_nombre'] ?: 'Sin nombre')],
+        ['Propiedad',     htmlspecialchars($prop['nombre'] ?? '')],
+        ['Unidad',        htmlspecialchars(($hab['nombre'] ?? '') . ($hab['codigo'] ? ' (' . $hab['codigo'] . ')' : ''))],
+        ['Duración',      $data['duracion_meses'] . ' meses'],
+        ['Renta base',    $f($data['precio_renta_base'])],
+        ['Descuento (' . $descPct . '%)', '<strong style="color:#DC2626">-' . $f($data['descuento_monto']) . '</strong>'],
+        ['Renta neta',    '<strong>' . $f($data['precio_renta_neta']) . '</strong>'],
+        ['Total mensual', '<strong style="font-size:16px">' . $f($data['subtotal_mensual']) . '</strong>'],
+    ];
+    $alt = false;
+    foreach ($tableRows as $r) {
+        $bg = $alt ? ' style="background:#f8fafc"' : '';
+        $html .= "<tr{$bg}><td style=\"padding:10px;border:1px solid #e5e7eb\"><strong>{$r[0]}</strong></td>"
+               . "<td style=\"padding:10px;border:1px solid #e5e7eb\">{$r[1]}</td></tr>";
+        $alt = !$alt;
+    }
+    $html .= '</table>';
+
+    // Botones de acción
+    $html .= '<div style="text-align:center;margin:24px 0">';
+    $html .= '<a href="' . $approveUrl . '" style="display:inline-block;background:#16A34A;color:#fff;padding:14px 40px;border-radius:8px;text-decoration:none;font-weight:700;font-size:16px;margin-right:12px">✓ APROBAR</a>';
+    $html .= '<a href="' . $rejectUrl . '" style="display:inline-block;background:#DC2626;color:#fff;padding:14px 40px;border-radius:8px;text-decoration:none;font-weight:700;font-size:16px">✗ RECHAZAR</a>';
+    $html .= '</div>';
+    $html .= '<p style="font-size:12px;color:#9ca3af;text-align:center">Este enlace es único y seguro. Solo tú puedes aprobar esta cotización.</p>';
+    $html .= '</div></div>';
+
+    $mailSvc->send(
+        to:       $emailAprobador,
+        toName:   'Director Comercial',
+        subject:  "🔔 Descuento {$descPct}% requiere aprobación — Cotización #{$cotId}",
+        body:     $html,
+    );
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -116,6 +233,32 @@ if ($tab === 'ver' && isset($_GET['id'])) {
         [$cotId]
     );
     if (!$cot) adminRedirect('cotizador.php?tab=historial', 'error', 'Cotización no encontrada.');
+
+    // ── Bloquear si pendiente de autorización ──
+    if (($cot['estatus'] ?? '') === 'pendiente_autorizacion') {
+        ?>
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+            <title>Pendiente de Autorización</title>
+            <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f8fafc;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}</style>
+        </head>
+        <body>
+        <div style="max-width:500px;text-align:center;padding:40px;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.08)">
+            <div style="font-size:48px;margin-bottom:16px">🔒</div>
+            <h1 style="color:#202944;font-size:22px;margin-bottom:12px">Pendiente de Autorización</h1>
+            <p style="color:#6b7280;font-size:15px;margin-bottom:24px">
+                Esta cotización incluye un descuento del <strong style="color:#DC2626"><?= $cot['descuento_porcentaje'] ?>%</strong>
+                y requiere aprobación del Director Comercial antes de poder visualizarla o enviarla.
+            </p>
+            <a href="cotizador.php?tab=historial" style="display:inline-block;background:#202944;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:14px">← Volver al historial</a>
+        </div>
+        </body>
+        </html>
+        <?php
+        exit;
+    }
 
     $logoUrl = dbFetchValue("SELECT valor FROM config WHERE clave='logo_color'") ?: 'pics/Logo_Parklife.png';
     $tel     = dbFetchValue("SELECT valor FROM config WHERE clave='telefono_principal'") ?: '';
@@ -183,7 +326,7 @@ if ($tab === 'ver' && isset($_GET['id'])) {
             <a class="btn-print" style="background:#25d366" href="https://wa.me/<?= $waTel ?>?text=<?= urlencode($waMsg) ?>" target="_blank">💬 WhatsApp</a>
             <?php endif; ?>
             <?php if ($cot['cliente_email']): ?>
-            <a class="btn-print" style="background:#4a90d9" href="mailto:<?= e($cot['cliente_email']) ?>?subject=<?= urlencode('Cotización Park Life ' . $cot['prop_nombre'] . ' #' . $cot['id']) ?>&body=<?= urlencode("Hola {$cot['cliente_nombre']},\n\nTe comparto tu cotización para Park Life {$cot['prop_nombre']}.\n\nUnidad: {$cot['hab_nombre']}\nDuración: {$cot['duracion_meses']} meses\nTotal mensual: $" . number_format((float)$cot['subtotal_mensual'], 2) . " MXN\nTotal contrato: $" . number_format((float)$cot['total_contrato'], 2) . " MXN\n\nQuedo a tus órdenes para cualquier duda.") ?>" target="_blank">✉️ Email</a>
+            <button class="btn-print" style="background:#4a90d9" id="ver-send-email" data-cotid="<?= $cot['id'] ?>" data-email="<?= e($cot['cliente_email']) ?>">✉️ Enviar Email</button>
             <?php endif; ?>
             <a class="btn-print" style="background:#b45309" href="cotizador.php?tab=nueva&edit=<?= $cot['id'] ?>">✏️ Editar</a>
             <a class="btn-back" href="cotizador.php?tab=historial">← Historial</a>
@@ -280,6 +423,31 @@ if ($tab === 'ver' && isset($_GET['id'])) {
                 <div style="text-align:right;">Cotización generada el <?= date('d/m/Y H:i', strtotime($cot['created_at'])) ?></div>
             </div>
         </div>
+
+        <!-- Email SMTP desde vista imprimible -->
+        <script>
+        document.getElementById('ver-send-email')?.addEventListener('click', function() {
+            const btn = this;
+            const cotId = btn.dataset.cotid;
+            const email = btn.dataset.email;
+            if (!confirm('¿Enviar cotización por email a ' + email + '?')) return;
+            btn.textContent = '⏳ Enviando...';
+            btn.style.opacity = '0.6';
+            btn.style.pointerEvents = 'none';
+            const fd = new FormData();
+            fd.append('csrf_token', '<?= e($csrf) ?>');
+            fd.append('action', 'enviar_email');
+            fd.append('cot_id', cotId);
+            fetch('cotizador.php', { method: 'POST', body: fd })
+                .then(r => r.json())
+                .then(res => {
+                    btn.textContent = res.success ? '✅ Enviado' : '❌ Error';
+                    btn.style.opacity = '1';
+                    if (!res.success) { alert(res.error || 'Error al enviar'); btn.style.pointerEvents = 'auto'; }
+                })
+                .catch(() => { btn.textContent = '❌ Error'; btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; });
+        });
+        </script>
     </body>
     </html>
     <?php
@@ -295,6 +463,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $postAction = $_POST['action'] ?? '';
 
+    // ── Guardar / Actualizar cotización ──────────────────────────────────
     if ($postAction === 'guardar' || $postAction === 'actualizar') {
         $data = [
             'admin_id'              => $adminId,
@@ -328,21 +497,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'notas'                 => sanitizeStr($_POST['notas'] ?? ''),
         ];
 
+        // ── Workflow de descuentos ──
+        $descPct = (float)($data['descuento_porcentaje'] ?? 0);
+        $requiereAuth = $descPct > 0;
+
         if ($postAction === 'actualizar' && !empty($_POST['cot_id'])) {
+            // ACTUALIZAR cotización existente
             $cotId = (int)$_POST['cot_id'];
+
+            if ($requiereAuth) {
+                $data['estatus'] = 'pendiente_autorizacion';
+                $data['requiere_autorizacion'] = 1;
+                $data['autorizado_por'] = null;
+                $data['autorizado_at']  = null;
+                $cotActual = dbFetchOne("SELECT autorizacion_token FROM cotizaciones WHERE id=?", [$cotId]);
+                if (empty($cotActual['autorizacion_token'])) {
+                    $data['autorizacion_token'] = bin2hex(random_bytes(32));
+                }
+            } else {
+                $data['requiere_autorizacion'] = 0;
+            }
+
             $sets = implode(', ', array_map(fn($k) => "$k=?", array_keys($data)));
             dbExecute("UPDATE cotizaciones SET $sets WHERE id=?", [...array_values($data), $cotId]);
-            adminRedirect("cotizador.php?tab=historial", 'success', "Cotización #{$cotId} actualizada.");
+
+            if ($requiereAuth) {
+                $tkn = $data['autorizacion_token'] ?? $cotActual['autorizacion_token'] ?? '';
+                enviarSolicitudDescuento($cotId, $data, $tkn);
+                adminRedirect("cotizador.php?tab=historial", 'info',
+                    "Cotización #{$cotId} actualizada. Pendiente de autorización por descuento del {$descPct}%.");
+            } else {
+                adminRedirect("cotizador.php?tab=historial", 'success', "Cotización #{$cotId} actualizada.");
+            }
         } else {
-            $data['estatus'] = 'borrador';
+            // NUEVA cotización
+            if ($requiereAuth) {
+                $data['estatus'] = 'pendiente_autorizacion';
+                $data['requiere_autorizacion'] = 1;
+                $data['autorizacion_token'] = bin2hex(random_bytes(32));
+            } else {
+                $data['estatus'] = 'borrador';
+                $data['requiere_autorizacion'] = 0;
+            }
             $data['token_publico'] = bin2hex(random_bytes(16));
             $cols = implode(',', array_keys($data));
             $phs  = implode(',', array_fill(0, count($data), '?'));
             $newId = dbInsert("INSERT INTO cotizaciones ($cols) VALUES ($phs)", array_values($data));
-            adminRedirect("cotizador.php?tab=historial", 'success', "Cotización #{$newId} guardada.");
+
+            if ($requiereAuth) {
+                enviarSolicitudDescuento($newId, $data);
+                adminRedirect("cotizador.php?tab=historial", 'info',
+                    "Cotización #{$newId} guardada. Pendiente de autorización por descuento del {$descPct}%.");
+            } else {
+                adminRedirect("cotizador.php?tab=historial", 'success', "Cotización #{$newId} guardada.");
+            }
         }
     }
 
+    // ── Cambiar estatus ──────────────────────────────────────────────────
     if ($postAction === 'cambiar_estatus') {
         $cotId  = (int)$_POST['cot_id'];
         $nuevo  = $_POST['nuevo_estatus'] ?? '';
@@ -353,11 +565,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         adminRedirect("cotizador.php?tab=historial", 'success', "Estatus actualizado.");
     }
 
+    // ── Eliminar ─────────────────────────────────────────────────────────
     if ($postAction === 'eliminar') {
         $cotId = (int)$_POST['cot_id'];
         $where = $adminRole === 'superadmin' ? '' : " AND admin_id = $adminId";
         dbExecute("DELETE FROM cotizaciones WHERE id = ? $where", [$cotId]);
         adminRedirect("cotizador.php?tab=historial", 'success', "Cotización eliminada.");
+    }
+
+    // ── Enviar cotización por email SMTP ─────────────────────────────────
+    if ($postAction === 'enviar_email') {
+        header('Content-Type: application/json');
+        $cotId = (int)($_POST['cot_id'] ?? 0);
+        $where = $adminRole === 'superadmin' ? '' : " AND c.admin_id = $adminId";
+        $cot = dbFetchOne(
+            "SELECT c.*, p.nombre AS prop_nombre, h.nombre AS hab_nombre,
+                    h.codigo AS hab_codigo, p.ciudad
+             FROM cotizaciones c
+             JOIN propiedades p ON p.id = c.propiedad_id
+             JOIN habitaciones h ON h.id = c.habitacion_id
+             WHERE c.id = ? $where", [$cotId]
+        );
+        if (!$cot || !$cot['cliente_email']) {
+            echo json_encode(['success' => false, 'error' => 'Cotización no encontrada o sin email.']);
+            exit;
+        }
+        if (($cot['estatus'] ?? '') === 'pendiente_autorizacion') {
+            echo json_encode(['success' => false, 'error' => 'Cotización pendiente de autorización. No se puede enviar.']);
+            exit;
+        }
+
+        require_once __DIR__ . '/../services/MailService.php';
+        $mailSvc = new MailService();
+        $body = buildQuoteEmailHtml($cot, $baseUrl);
+        $subject = 'Cotización Park Life ' . $cot['prop_nombre'] . ' - ' . $cot['hab_nombre'] . ' #' . $cot['id'];
+
+        $ok = $mailSvc->send(
+            to:        $cot['cliente_email'],
+            toName:    $cot['cliente_nombre'] ?: 'Cliente',
+            subject:   $subject,
+            body:      $body,
+            replyTo:   $_SESSION['admin_email'] ?? null,
+            replyName: $_SESSION['admin_nombre'] ?? 'Park Life'
+        );
+
+        if ($ok && $cot['estatus'] === 'borrador') {
+            dbExecute("UPDATE cotizaciones SET estatus = 'enviada' WHERE id = ?", [$cotId]);
+        }
+
+        echo json_encode(['success' => $ok, 'message' => $ok ? 'Email enviado correctamente.' : 'Error al enviar email.']);
+        exit;
     }
 }
 
@@ -592,6 +849,10 @@ if ($tab === 'nueva'): ?>
                     <span class="text-gray-500">Ahorro mensual:</span>
                     <span id="desc-monto" class="font-bold text-amber-700">-$0.00</span>
                 </div>
+                <!-- Aviso de autorización -->
+                <div id="desc-auth-warning" class="hidden mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700">
+                    <strong>⚠️ Requiere autorización:</strong> Al aplicar un descuento, la cotización quedará pendiente de aprobación del Director Comercial antes de poder enviarla o imprimirla.
+                </div>
             </div>
 
             <!-- IVA -->
@@ -697,11 +958,11 @@ if ($tab === 'nueva'): ?>
                     <input type="hidden" name="total_contrato" id="h-total-contrato">
 
                     <div class="space-y-2 pt-2">
-                        <button type="submit" class="btn-primary w-full">
+                        <button type="submit" class="btn-primary w-full" id="btn-guardar">
                             <i data-lucide="save" class="w-4 h-4"></i>
                             <?= $editCot ? 'Actualizar cotización' : 'Guardar cotización' ?>
                         </button>
-                        <p class="text-xs text-center text-gray-400">Después de guardar podrás enviar por email, WhatsApp o imprimir PDF.</p>
+                        <p class="text-xs text-center text-gray-400" id="btn-guardar-hint">Después de guardar podrás enviar por email, WhatsApp o imprimir PDF.</p>
                     </div>
                 </div>
             </div>
@@ -747,14 +1008,18 @@ elseif ($tab === 'historial'): ?>
             </thead>
             <tbody class="divide-y divide-gray-50">
                 <?php foreach ($cotizaciones as $c):
+                    $isPendiente = ($c['estatus'] ?? '') === 'pendiente_autorizacion';
                     $statusCls = match($c['estatus']) {
-                        'borrador'  => 'bg-gray-100 text-gray-600',
-                        'enviada'   => 'bg-blue-100 text-blue-700',
-                        'aceptada'  => 'bg-green-100 text-green-700',
-                        'rechazada' => 'bg-red-100 text-red-700',
-                        'expirada'  => 'bg-yellow-100 text-yellow-700',
-                        default     => 'bg-gray-100 text-gray-600',
+                        'borrador'                => 'bg-gray-100 text-gray-600',
+                        'pendiente_autorizacion'   => 'bg-amber-100 text-amber-700',
+                        'enviada'                  => 'bg-blue-100 text-blue-700',
+                        'aceptada'                 => 'bg-green-100 text-green-700',
+                        'rechazada'                => 'bg-red-100 text-red-700',
+                        'expirada'                 => 'bg-yellow-100 text-yellow-700',
+                        default                    => 'bg-gray-100 text-gray-600',
                     };
+                    $statusLabel = $isPendiente ? 'pend. autorización' : $c['estatus'];
+                    $blur = $isPendiente ? 'style="filter:blur(6px);user-select:none"' : '';
                 ?>
                 <tr class="hover:bg-slate-50">
                     <td class="table-td text-gray-400 hidden sm:table-cell"><?= $c['id'] ?></td>
@@ -772,14 +1037,16 @@ elseif ($tab === 'historial'): ?>
                     </td>
                     <td class="table-td text-center hidden sm:table-cell"><?= $c['duracion_meses'] ?>m<br><span class="text-xs text-gray-400">(<?= $c['tarifa_aplicada'] ?>)</span></td>
                     <td class="table-td text-right hidden md:table-cell">
-                        $<?= number_format((float)$c['precio_renta_neta'], 2) ?>
+                        <span <?= $blur ?>>$<?= number_format((float)$c['precio_renta_neta'], 2) ?></span>
                         <?php if ((float)$c['descuento_porcentaje'] > 0): ?>
-                        <div class="text-xs text-amber-600">-<?= $c['descuento_porcentaje'] ?>%</div>
+                        <div class="text-xs <?= $isPendiente ? 'text-amber-600' : 'text-amber-600' ?>"><?= $isPendiente ? '🔒' : '' ?>-<?= $c['descuento_porcentaje'] ?>%</div>
                         <?php endif; ?>
                     </td>
-                    <td class="table-td text-right font-semibold">$<?= number_format((float)$c['subtotal_mensual'], 2) ?></td>
+                    <td class="table-td text-right font-semibold">
+                        <span <?= $blur ?>>$<?= number_format((float)$c['subtotal_mensual'], 2) ?></span>
+                    </td>
                     <td class="table-td text-center">
-                        <span class="px-2 py-0.5 text-xs font-semibold rounded-full <?= $statusCls ?>"><?= $c['estatus'] ?></span>
+                        <span class="status-badge px-2 py-0.5 text-xs font-semibold rounded-full <?= $statusCls ?>"><?= $statusLabel ?></span>
                     </td>
                     <td class="table-td">
                         <div class="flex items-center gap-1 justify-end">
@@ -793,7 +1060,7 @@ elseif ($tab === 'historial'): ?>
                             </a>
                             <button class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-pk cot-menu-trigger"
                                 data-cot-id="<?= $c['id'] ?>"
-                                data-cot-estatus="<?= $c['estatus'] ?>"
+                                data-cot-estatus="<?= e($c['estatus']) ?>"
                                 data-cot-tel="<?= e(preg_replace('/[^0-9]/', '', $c['cliente_telefono'] ?? '')) ?>"
                                 data-cot-email="<?= e($c['cliente_email'] ?? '') ?>"
                                 data-cot-nombre="<?= e($c['cliente_nombre'] ?? '') ?>"
@@ -1012,6 +1279,10 @@ function recalcular() {
     const descMonto = Math.round(rentaBase * descPct / 100 * 100) / 100;
     const rentaNeta = rentaBase - descMonto;
 
+    // Mostrar/ocultar aviso de autorización por descuento
+    const authWarning = document.getElementById('desc-auth-warning');
+    if (authWarning) authWarning.classList.toggle('hidden', descPct <= 0);
+
     // Mantenimiento siempre incluido
     const mant = parseFloat(h.precio_mantenimiento) || 0;
 
@@ -1072,6 +1343,15 @@ function recalcular() {
     document.getElementById('res-total-contrato').textContent = fmt(totalContrato);
     document.getElementById('desc-monto').textContent = '-' + fmt(descMonto);
 
+    // Actualizar hint del botón guardar si hay descuento
+    const hint = document.getElementById('btn-guardar-hint');
+    if (hint) {
+        hint.textContent = descPct > 0
+            ? '⚠️ Con descuento: la cotización quedará pendiente de autorización.'
+            : 'Después de guardar podrás enviar por email, WhatsApp o imprimir PDF.';
+        hint.style.color = descPct > 0 ? '#b45309' : '';
+    }
+
     // Hidden
     document.getElementById('h-renta-base').value = rentaBase.toFixed(2);
     document.getElementById('h-desc-pct').value = descPct.toFixed(2);
@@ -1129,15 +1409,13 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             const d = this.dataset;
             const rect = this.getBoundingClientRect();
+            const isPendiente = d.cotEstatus === 'pendiente_autorizacion';
 
-            // Position: align right edge to button, below it — mobile-friendly
+            // Position
             let top = rect.bottom + 4;
-            let left = rect.right - 224; // 224 = w-56 = 14rem
+            let left = rect.right - 224;
             if (left < 8) left = 8;
-            // On mobile, center if it would go off-screen
-            if (window.innerWidth < 640) {
-                left = Math.max(8, (window.innerWidth - 224) / 2);
-            }
+            if (window.innerWidth < 640) left = Math.max(8, (window.innerWidth - 224) / 2);
             if (top + 360 > window.innerHeight) top = Math.max(8, rect.top - 360);
 
             content.style.top = top + 'px';
@@ -1146,7 +1424,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Populate
             document.getElementById('cp-title').textContent = 'Cotización #' + d.cotId;
             document.getElementById('cp-sub').textContent = d.cotProp + ' · ' + d.cotHab;
-            document.getElementById('cp-pdf').href = '?tab=ver&id=' + d.cotId;
             document.getElementById('cp-delete-id').value = d.cotId;
 
             // Delete confirm
@@ -1154,10 +1431,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!confirm('¿Eliminar cotización #' + d.cotId + '?')) ev.preventDefault();
             };
 
-            // WhatsApp — rich message with full breakdown
+            // ── WhatsApp ──
             const waLink = document.getElementById('cp-wa');
             const waLabel = document.getElementById('cp-wa-label');
-            if (d.cotTel) {
+            if (isPendiente) {
+                waLink.href = '#';
+                waLink.classList.add('opacity-30','pointer-events-none');
+                waLabel.textContent = '🔒 Pendiente autorización';
+            } else if (d.cotTel) {
                 const nombre = (d.cotNombre || 'cliente').split(' ')[0];
                 let wa = `Hola ${d.cotNombre}, te comparto tu cotización de *Park Life ${d.cotProp}* 🏠\n\n`;
                 wa += `📋 *Cotización #${d.cotId}*\n🏢 ${d.cotHab}\n📅 ${d.cotDur} ${d.cotDur==='1'?'mes':'meses'} (tarifa ${d.cotTarifa})\n\n`;
@@ -1174,7 +1455,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (d.cotToken) wa += `\n🔗 Ver cotización:\n<?= $baseUrl ?>/cotizacion.php?t=${d.cotToken}\n`;
                 wa += `\nQuedo a tus órdenes. 🙂`;
                 waLink.href = 'https://wa.me/' + d.cotTel + '?text=' + encodeURIComponent(wa);
-                waLink.classList.remove('opacity-40','pointer-events-none');
+                waLink.classList.remove('opacity-30','opacity-40','pointer-events-none');
                 waLabel.textContent = 'WhatsApp a ' + nombre;
             } else {
                 waLink.href = '#';
@@ -1182,33 +1463,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 waLabel.textContent = 'WhatsApp (sin teléfono)';
             }
 
-            // Email — rich body
+            // ── Email — SMTP via AJAX (ya no mailto:) ──
             const emLink = document.getElementById('cp-email');
             const emLabel = document.getElementById('cp-email-label');
-            if (d.cotEmail) {
-                const nombre = (d.cotNombre || 'cliente').split(' ')[0];
-                const subject = encodeURIComponent('Cotización Park Life ' + d.cotProp + ' #' + d.cotId);
-                let em = `Hola ${d.cotNombre},\n\nTe comparto tu cotización para Park Life ${d.cotProp}.\n\n`;
-                em += `Unidad: ${d.cotHab}\nDuración: ${d.cotDur} meses (tarifa ${d.cotTarifa})\n\n`;
-                em += `Renta base: $${d.cotRentaBase}\n`;
-                if (parseFloat(d.cotDescPct) > 0) em += `Descuento (${d.cotDescPct}%): -$${d.cotDescMonto}\n`;
-                em += `Renta neta: $${d.cotRentaNeta}\n`;
-                if (parseFloat(d.cotMant) > 0) em += `Mantenimiento: $${d.cotMant}\n`;
-                if (parseFloat(d.cotServ) > 0) em += `Servicios: $${d.cotServ}\n`;
-                if (parseFloat(d.cotAmue) > 0) em += `Amueblado: $${d.cotAmue}\n`;
-                if (parseFloat(d.cotPark) > 0) em += `Estacionamiento: $${d.cotPark}\n`;
-                if (parseFloat(d.cotMasc) > 0) em += `Mascota: $${d.cotMasc}\n`;
-                if (parseFloat(d.cotIva) > 0) em += `IVA (${d.cotIvaPct}%): $${d.cotIva}\n`;
-                em += `\nTOTAL MENSUAL: $${d.cotMensual} MXN\nTotal contrato: $${d.cotContrato} MXN\n`;
-                if (d.cotToken) em += `\nVer cotización: <?= $baseUrl ?>/cotizacion.php?t=${d.cotToken}\n`;
-                em += `\nQuedo a tus órdenes.`;
-                emLink.href = 'mailto:' + d.cotEmail + '?subject=' + subject + '&body=' + encodeURIComponent(em);
+            // Reset state
+            emLink.classList.remove('opacity-30','opacity-40','pointer-events-none');
+            emLink.style.color = '';
+            emLabel.style.color = '';
+
+            if (isPendiente) {
+                emLink.href = '#';
+                emLink.onclick = function(ev) { ev.preventDefault(); alert('Cotización pendiente de autorización del Director Comercial. No se puede enviar.'); };
+                emLink.classList.add('opacity-30','pointer-events-none');
+                emLabel.textContent = '🔒 Pendiente autorización';
+            } else if (d.cotEmail) {
+                emLink.href = '#';
                 emLink.classList.remove('opacity-40','pointer-events-none');
-                emLabel.textContent = 'Email a ' + nombre;
+                emLabel.textContent = 'Email a ' + (d.cotNombre || d.cotEmail).split(' ')[0];
+                emLink.onclick = function(ev) {
+                    ev.preventDefault();
+                    if (!confirm('¿Enviar cotización por email a ' + d.cotEmail + '?')) return;
+                    emLabel.textContent = 'Enviando...';
+                    emLink.style.opacity = '0.5';
+                    emLink.style.pointerEvents = 'none';
+                    const fd = new FormData();
+                    fd.append('csrf_token', csrf);
+                    fd.append('action', 'enviar_email');
+                    fd.append('cot_id', d.cotId);
+                    fetch('cotizador.php', { method: 'POST', body: fd })
+                        .then(r => r.json())
+                        .then(res => {
+                            if (res.success) {
+                                emLabel.textContent = '✓ Enviado';
+                                emLabel.style.color = '#16a34a';
+                                // Actualizar badge si era borrador
+                                const tr = emLink.closest('#cotPanel')?.previousElementSibling;
+                                // intentar actualizar en tabla
+                                document.querySelectorAll('.cot-menu-trigger').forEach(t => {
+                                    if (t.dataset.cotId === d.cotId && t.dataset.cotEstatus === 'borrador') {
+                                        t.dataset.cotEstatus = 'enviada';
+                                        const row = t.closest('tr');
+                                        if (row) {
+                                            const badge = row.querySelector('.status-badge');
+                                            if (badge) { badge.textContent = 'enviada'; badge.className = 'status-badge px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-700'; }
+                                        }
+                                    }
+                                });
+                            } else {
+                                emLabel.textContent = '✗ Error';
+                                emLabel.style.color = '#dc2626';
+                                alert(res.error || 'Error al enviar');
+                            }
+                        })
+                        .catch(() => { emLabel.textContent = '✗ Error'; emLabel.style.color = '#dc2626'; });
+                };
             } else {
                 emLink.href = '#';
+                emLink.onclick = ev => ev.preventDefault();
                 emLink.classList.add('opacity-40','pointer-events-none');
                 emLabel.textContent = 'Email (sin correo)';
+            }
+
+            // ── PDF / Imprimir ──
+            const pdfLink = document.getElementById('cp-pdf');
+            if (isPendiente) {
+                pdfLink.href = '#';
+                pdfLink.onclick = function(ev) { ev.preventDefault(); alert('No se puede imprimir hasta que el descuento sea autorizado.'); };
+                pdfLink.classList.add('opacity-30');
+            } else {
+                pdfLink.href = '?tab=ver&id=' + d.cotId;
+                pdfLink.onclick = null;
+                pdfLink.classList.remove('opacity-30');
             }
 
             // Status pills
