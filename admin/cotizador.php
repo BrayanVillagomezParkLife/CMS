@@ -24,7 +24,9 @@ $tab        = $_GET['tab'] ?? 'nueva';
 $adminId    = (int)($_SESSION['admin_id'] ?? 0);
 $adminRole  = $_SESSION['admin_role'] ?? 'editor';
 $propiedades = dbFetchAll("SELECT id, nombre FROM propiedades WHERE activo=1 ORDER BY nombre");
-$baseUrl = rtrim(($_SERVER['REQUEST_SCHEME'] ?? 'https') . '://' . ($_SERVER['HTTP_HOST'] ?? 'parklife.mx'), '/');
+$scheme = ($_SERVER['REQUEST_SCHEME'] ?? 'https');
+if (str_contains($_SERVER['HTTP_HOST'] ?? '', 'localhost')) $scheme = 'http';
+$baseUrl = rtrim($scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'parklife.mx'), '/');
 
 // ═════════════════════════════════════════════════════════════════════════════
 // HELPER FUNCTIONS
@@ -120,7 +122,9 @@ function enviarSolicitudDescuento(int $cotId, array $data, ?string $token = null
     $mailSvc = new MailService();
 
     $token = $token ?? $data['autorizacion_token'] ?? '';
-    $baseUrl = rtrim(($_SERVER['REQUEST_SCHEME'] ?? 'https') . '://'
+    $scheme = ($_SERVER['REQUEST_SCHEME'] ?? 'https');
+    if (str_contains($_SERVER['HTTP_HOST'] ?? '', 'localhost')) $scheme = 'http';
+    $baseUrl = rtrim($scheme . '://'
              . ($_SERVER['HTTP_HOST'] ?? 'parklife.mx'), '/');
     $approveUrl = $baseUrl . '/admin/aprobar-descuento.php?token=' . $token . '&accion=aprobar';
     $rejectUrl  = $baseUrl . '/admin/aprobar-descuento.php?token=' . $token . '&accion=rechazar';
@@ -141,16 +145,30 @@ function enviarSolicitudDescuento(int $cotId, array $data, ?string $token = null
     $html .= '<p><strong>' . htmlspecialchars($agente) . '</strong> ha generado una cotización con descuento del <strong style="color:#DC2626;font-size:18px">' . $descPct . '%</strong></p>';
 
     $html .= '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:16px 0">';
-    $tableRows = [
+$tableRows = [
         ['Cliente',       htmlspecialchars($data['cliente_nombre'] ?: 'Sin nombre')],
         ['Propiedad',     htmlspecialchars($prop['nombre'] ?? '')],
         ['Unidad',        htmlspecialchars(($hab['nombre'] ?? '') . ($hab['codigo'] ? ' (' . $hab['codigo'] . ')' : ''))],
-        ['Duración',      $data['duracion_meses'] . ' meses'],
+        ['Duración',      $data['duracion_meses'] . ' meses (tarifa ' . $data['tarifa_aplicada'] . ')'],
         ['Renta base',    $f($data['precio_renta_base'])],
         ['Descuento (' . $descPct . '%)', '<strong style="color:#DC2626">-' . $f($data['descuento_monto']) . '</strong>'],
         ['Renta neta',    '<strong>' . $f($data['precio_renta_neta']) . '</strong>'],
-        ['Total mensual', '<strong style="font-size:16px">' . $f($data['subtotal_mensual']) . '</strong>'],
     ];
+    // Extras
+    if ((float)($data['monto_mantenimiento'] ?? 0) > 0)
+        $tableRows[] = ['Mantenimiento', '+' . $f($data['monto_mantenimiento'])];
+    if (!empty($data['inc_servicios']) && (float)($data['monto_servicios'] ?? 0) > 0)
+        $tableRows[] = ['Servicios', '+' . $f($data['monto_servicios'])];
+    if (!empty($data['inc_amueblado']) && (float)($data['monto_amueblado'] ?? 0) > 0)
+        $tableRows[] = ['Amueblado', '+' . $f($data['monto_amueblado'])];
+    if (!empty($data['inc_parking']) && (float)($data['monto_parking'] ?? 0) > 0)
+        $tableRows[] = ['Estacionamiento', '+' . $f($data['monto_parking'])];
+    if (!empty($data['inc_mascota']) && (float)($data['monto_mascota'] ?? 0) > 0)
+        $tableRows[] = ['Mascota', '+' . $f($data['monto_mascota'])];
+    if ((float)($data['monto_iva'] ?? 0) > 0)
+        $tableRows[] = ['IVA (' . ($data['iva_porcentaje'] ?? 16) . '%)', '+' . $f($data['monto_iva'])];
+    $tableRows[] = ['<strong>Total mensual</strong>', '<strong style="font-size:16px">' . $f($data['subtotal_mensual']) . ' MXN</strong>'];
+    $tableRows[] = ['Total contrato (' . $data['duracion_meses'] . 'm)', '<strong>' . $f($data['total_contrato']) . ' MXN</strong>'];
     $alt = false;
     foreach ($tableRows as $r) {
         $bg = $alt ? ' style="background:#f8fafc"' : '';
@@ -254,10 +272,10 @@ if ($tab === 'ver' && isset($_GET['id'])) {
             </p>
             <a href="cotizador.php?tab=historial" style="display:inline-block;background:#202944;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:14px">← Volver al historial</a>
         </div>
-        </body>
-        </html>
-        <?php
-        exit;
+    </body>
+    </html>
+    <?php
+    exit;
     }
 
     $logoUrl = dbFetchValue("SELECT valor FROM config WHERE clave='logo_color'") ?: 'pics/Logo_Parklife.png';
@@ -480,17 +498,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'descuento_monto'       => round((float)$_POST['descuento_monto'], 2),
             'precio_renta_neta'     => round((float)$_POST['precio_renta_neta'], 2),
             'inc_mantenimiento'     => 1,
-            'inc_servicios'         => isset($_POST['inc_servicios']) ? 1 : 0,
-            'inc_amueblado'         => isset($_POST['inc_amueblado']) ? 1 : 0,
-            'inc_parking'           => isset($_POST['inc_parking']) ? 1 : 0,
-            'inc_mascota'           => isset($_POST['inc_mascota']) ? 1 : 0,
+            'inc_servicios'         => ($_POST['inc_servicios'] ?? '0') === '1' ? 1 : 0,
+            'inc_amueblado'         => ($_POST['inc_amueblado'] ?? '0') === '1' ? 1 : 0,
+            'inc_parking'           => ($_POST['inc_parking'] ?? '0') === '1' ? 1 : 0,
+            'inc_mascota'           => ($_POST['inc_mascota'] ?? '0') === '1' ? 1 : 0,
             'monto_mantenimiento'   => round((float)$_POST['monto_mantenimiento'], 2),
             'monto_servicios'       => round((float)$_POST['monto_servicios'], 2),
             'monto_amueblado'       => round((float)$_POST['monto_amueblado'], 2),
             'monto_parking'         => round((float)$_POST['monto_parking'], 2),
             'monto_mascota'         => round((float)$_POST['monto_mascota'], 2),
             'iva_porcentaje'        => 16.00,
-            'iva_sobre_renta'       => isset($_POST['iva_sobre_renta']) ? 1 : 0,
+            'iva_sobre_renta'       => ($_POST['iva_sobre_renta'] ?? '0') === '1' ? 1 : 0,
             'monto_iva'             => round((float)$_POST['monto_iva'], 2),
             'subtotal_mensual'      => round((float)$_POST['subtotal_mensual'], 2),
             'total_contrato'        => round((float)$_POST['total_contrato'], 2),
@@ -728,18 +746,52 @@ if ($tab === 'nueva'): ?>
                 </div>
             </div>
 
-            <div class="card p-5">
+<div class="card p-5">
                 <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <i data-lucide="user" class="w-4 h-4 text-pk"></i> Cliente
                     <span class="text-xs text-gray-400 font-normal">(opcional para borrador)</span>
                 </h3>
                 <div class="space-y-3">
-                    <div><label class="form-label text-xs">Nombre</label><input type="text" name="cliente_nombre" class="form-input text-sm" value="<?= e($editCot['cliente_nombre'] ?? '') ?>"></div>
-                    <div class="grid sm:grid-cols-2 gap-3">
-                        <div><label class="form-label text-xs">Email</label><input type="email" name="cliente_email" class="form-input text-sm" value="<?= e($editCot['cliente_email'] ?? '') ?>"></div>
-                        <div><label class="form-label text-xs">Teléfono</label><input type="text" name="cliente_telefono" class="form-input text-sm" value="<?= e($editCot['cliente_telefono'] ?? '') ?>"></div>
+                    <!-- Nombre con autocomplete Zoho -->
+                    <div class="relative" id="ac-wrapper">
+                        <label class="form-label text-xs flex items-center gap-2">
+                            Nombre
+                            <span id="ac-zoho-badge" class="hidden items-center gap-1 px-1.5 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-semibold rounded-full">
+                                <i data-lucide="cloud" class="w-3 h-3"></i> Zoho CRM
+                            </span>
+                            <span id="ac-spinner" class="hidden">
+                                <svg class="animate-spin w-3.5 h-3.5 text-pk" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                            </span>
+                        </label>
+                        <input type="text" name="cliente_nombre" id="inp-cliente-nombre"
+                               class="form-input text-sm" autocomplete="off"
+                               placeholder="Escribe para buscar en Zoho CRM..."
+                               value="<?= e($editCot['cliente_nombre'] ?? '') ?>">
+                        <input type="hidden" name="zoho_lead_id" id="inp-zoho-lead-id" value="">
+
+                        <!-- Dropdown resultados -->
+                        <div id="ac-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-72 overflow-y-auto">
+                            <!-- Se llena dinámicamente -->
+                        </div>
                     </div>
-                    <div><label class="form-label text-xs">Empresa</label><input type="text" name="cliente_empresa" class="form-input text-sm" value="<?= e($editCot['cliente_empresa'] ?? '') ?>"></div>
+
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <div><label class="form-label text-xs">Email</label><input type="email" name="cliente_email" id="inp-cliente-email" class="form-input text-sm" value="<?= e($editCot['cliente_email'] ?? '') ?>"></div>
+                        <div><label class="form-label text-xs">Teléfono</label><input type="text" name="cliente_telefono" id="inp-cliente-telefono" class="form-input text-sm" value="<?= e($editCot['cliente_telefono'] ?? '') ?>"></div>
+                    </div>
+                    <div><label class="form-label text-xs">Empresa</label><input type="text" name="cliente_empresa" id="inp-cliente-empresa" class="form-input text-sm" value="<?= e($editCot['cliente_empresa'] ?? '') ?>"></div>
+
+                    <!-- Info de lead seleccionado -->
+                    <div id="ac-selected-info" class="hidden p-2.5 bg-blue-50/50 border border-blue-100 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2 text-xs text-blue-700">
+                                <i data-lucide="link" class="w-3 h-3"></i>
+                                <span>Vinculado a Zoho CRM</span>
+                                <span id="ac-selected-owner" class="text-blue-500"></span>
+                            </div>
+                            <button type="button" id="ac-clear-btn" class="text-xs text-red-400 hover:text-red-600 font-medium">✕ Desvincular</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1018,7 +1070,9 @@ elseif ($tab === 'historial'): ?>
                         'expirada'                 => 'bg-yellow-100 text-yellow-700',
                         default                    => 'bg-gray-100 text-gray-600',
                     };
-                    $statusLabel = $isPendiente ? 'pend. autorización' : $c['estatus'];
+                    $descAprobado = ($c['estatus'] === 'borrador' && !empty($c['autorizado_por']));
+$statusLabel = $isPendiente ? 'pend. autorización' : ($descAprobado ? 'desc. aprobado' : $c['estatus']);
+if ($descAprobado) $statusCls = 'bg-emerald-100 text-emerald-700';
                     $blur = $isPendiente ? 'style="filter:blur(6px);user-select:none"' : '';
                 ?>
                 <tr class="hover:bg-slate-50">
@@ -1556,6 +1610,208 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof lucide !== 'undefined') lucide.createIcons();
         });
     });
+})();
+</script>
+
+<!-- Autocomplete Zoho CRM -->
+<script>
+(function(){
+    const wrapper   = document.getElementById('ac-wrapper');
+    if (!wrapper) return; // No estamos en tab nueva/editar
+
+    const inpNombre  = document.getElementById('inp-cliente-nombre');
+    const inpEmail   = document.getElementById('inp-cliente-email');
+    const inpTel     = document.getElementById('inp-cliente-telefono');
+    const inpEmpresa = document.getElementById('inp-cliente-empresa');
+    const inpZohoId  = document.getElementById('inp-zoho-lead-id');
+    const dropdown   = document.getElementById('ac-dropdown');
+    const spinner    = document.getElementById('ac-spinner');
+    const zohoBadge  = document.getElementById('ac-zoho-badge');
+    const selectedInfo = document.getElementById('ac-selected-info');
+    const selectedOwner = document.getElementById('ac-selected-owner');
+    const clearBtn   = document.getElementById('ac-clear-btn');
+
+    let debounceTimer = null;
+    let currentQuery  = '';
+    let activeIndex   = -1;
+
+    // ── Debounced search ──
+    inpNombre.addEventListener('input', function(){
+        const q = this.value.trim();
+        clearTimeout(debounceTimer);
+        activeIndex = -1;
+
+        if (q.length < 3) {
+            hideDropdown();
+            return;
+        }
+
+        debounceTimer = setTimeout(() => {
+            if (q !== currentQuery) {
+                currentQuery = q;
+                searchZoho(q);
+            }
+        }, 350);
+    });
+
+    // ── Keyboard nav ──
+    inpNombre.addEventListener('keydown', function(e){
+        const items = dropdown.querySelectorAll('.ac-item');
+        if (!items.length || dropdown.classList.contains('hidden')) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            activeIndex = Math.min(activeIndex + 1, items.length - 1);
+            highlightItem(items);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            activeIndex = Math.max(activeIndex - 1, 0);
+            highlightItem(items);
+        } else if (e.key === 'Enter' && activeIndex >= 0) {
+            e.preventDefault();
+            items[activeIndex].click();
+        } else if (e.key === 'Escape') {
+            hideDropdown();
+        }
+    });
+
+    // ── Click outside ──
+    document.addEventListener('click', function(e){
+        if (!wrapper.contains(e.target)) hideDropdown();
+    });
+
+    // ── Clear selection ──
+    clearBtn?.addEventListener('click', function(){
+        inpZohoId.value = '';
+        selectedInfo.classList.add('hidden');
+        zohoBadge.classList.add('hidden');
+        zohoBadge.classList.remove('flex');
+    });
+
+    // ── Search Zoho ──
+    async function searchZoho(q) {
+        spinner.classList.remove('hidden');
+        try {
+            const resp = await fetch('api/buscar-clientes.php?q=' + encodeURIComponent(q));
+            const data = await resp.json();
+            renderResults(data.results || [], q);
+        } catch (err) {
+            console.error('Autocomplete error:', err);
+            renderError();
+        } finally {
+            spinner.classList.add('hidden');
+        }
+    }
+
+    // ── Render results ──
+    function renderResults(results, query) {
+        dropdown.innerHTML = '';
+        activeIndex = -1;
+
+        if (!results.length) {
+            dropdown.innerHTML = `
+                <div class="px-4 py-3 text-center text-sm text-gray-400">
+                    <div class="text-lg mb-1">🔍</div>
+                    Sin resultados en Zoho CRM para "<strong>${escHtml(query)}</strong>"
+                    <div class="text-xs mt-1">Puedes ingresar los datos manualmente</div>
+                </div>`;
+            showDropdown();
+            return;
+        }
+
+        results.forEach((lead, i) => {
+            const div = document.createElement('div');
+            div.className = 'ac-item px-4 py-3 cursor-pointer hover:bg-pk/5 transition-colors border-b border-gray-50 last:border-0';
+            div.dataset.index = i;
+
+            const highlighted = highlightMatch(lead.nombre, query);
+            const emailHl = lead.email ? highlightMatch(lead.email, query) : '';
+            const phoneHl = lead.telefono ? highlightMatch(lead.telefono, query) : '';
+
+            div.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="min-w-0">
+                        <div class="font-semibold text-sm text-gray-800 truncate">${highlighted}</div>
+                        <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5">
+                            ${emailHl ? `<span class="text-xs text-gray-500 truncate">${emailHl}</span>` : ''}
+                            ${phoneHl ? `<span class="text-xs text-gray-400">${phoneHl}</span>` : ''}
+                        </div>
+                        ${lead.empresa ? `<div class="text-xs text-gray-400 mt-0.5 truncate">${escHtml(lead.empresa)}</div>` : ''}
+                    </div>
+                    ${lead.owner ? `<span class="text-[10px] text-gray-300 flex-shrink-0 ml-2">${escHtml(lead.owner)}</span>` : ''}
+                </div>`;
+
+            div.addEventListener('click', () => selectLead(lead));
+            dropdown.appendChild(div);
+        });
+
+        // Footer
+        const footer = document.createElement('div');
+        footer.className = 'px-4 py-2 bg-gray-50 text-center';
+        footer.innerHTML = `<span class="text-[10px] text-gray-400">${results.length} resultado${results.length !== 1 ? 's' : ''} desde Zoho CRM</span>`;
+        dropdown.appendChild(footer);
+
+        showDropdown();
+    }
+
+    function renderError() {
+        dropdown.innerHTML = `
+            <div class="px-4 py-3 text-center text-sm text-red-400">
+                <div class="text-lg mb-1">⚠️</div>
+                Error al conectar con Zoho CRM
+                <div class="text-xs mt-1">Puedes ingresar los datos manualmente</div>
+            </div>`;
+        showDropdown();
+    }
+
+    // ── Select lead ──
+    function selectLead(lead) {
+        inpNombre.value  = lead.nombre || '';
+        inpEmail.value   = lead.email || '';
+        inpTel.value     = lead.telefono || '';
+        inpEmpresa.value = lead.empresa || '';
+        inpZohoId.value  = lead.zoho_id || '';
+
+        // Mostrar badge y info
+        zohoBadge.classList.remove('hidden');
+        zohoBadge.classList.add('flex');
+        selectedInfo.classList.remove('hidden');
+        selectedOwner.textContent = lead.owner ? `• Asesor: ${lead.owner}` : '';
+
+        hideDropdown();
+        currentQuery = '';
+
+        // Refrescar iconos de Lucide si aplica
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // ── Helpers ──
+    function showDropdown() { dropdown.classList.remove('hidden'); }
+    function hideDropdown() { dropdown.classList.add('hidden'); }
+
+    function highlightItem(items) {
+        items.forEach((el, i) => {
+            el.classList.toggle('bg-pk/5', i === activeIndex);
+        });
+        if (activeIndex >= 0) items[activeIndex].scrollIntoView({ block: 'nearest' });
+    }
+
+    function highlightMatch(text, query) {
+        if (!text || !query) return escHtml(text || '');
+        const safe = escHtml(text);
+        const regex = new RegExp('(' + escRegex(query) + ')', 'gi');
+        return safe.replace(regex, '<mark class="bg-yellow-100 text-yellow-800 rounded px-0.5">$1</mark>');
+    }
+
+    function escHtml(s) {
+        const d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    function escRegex(s) {
+        return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
 })();
 </script>
 

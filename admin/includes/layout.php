@@ -23,6 +23,7 @@ function adminLayoutOpen(string $pageTitle = 'Admin'): void
         ['id' => 'habitaciones',      'label' => 'Habitaciones',       'icon' => 'bed-double',        'href' => 'habitaciones.php',       'modulo' => 'habitaciones'],
         ['id' => 'precios',           'label' => 'Precios',            'icon' => 'badge-dollar-sign', 'href' => 'precios.php',            'modulo' => 'precios'],
         ['id' => 'cotizador',         'label' => 'Cotizador',          'icon' => 'calculator',        'href' => 'cotizador.php',          'modulo' => 'cotizador'],
+        ['id' => 'gestion-cotizaciones', 'label' => 'Gestión Cotiz.', 'icon' => 'clipboard-list',    'href' => 'gestion-cotizaciones.php', 'modulo' => 'gestion-cotizaciones'],
         ['id' => 'imagenes',          'label' => 'Imágenes',           'icon' => 'image',             'href' => 'imagenes.php',           'modulo' => 'imagenes'],
         ['id' => 'imagenes-auditoria','label' => 'Auditoría img',      'icon' => 'scan-search',       'href' => 'imagenes-auditoria.php', 'modulo' => 'imagenes-auditoria'],
         ['id' => 'amenidades',        'label' => 'Amenidades',         'icon' => 'sparkles',          'href' => 'amenidades.php',         'modulo' => 'amenidades'],
