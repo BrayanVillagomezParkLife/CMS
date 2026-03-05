@@ -51,15 +51,16 @@ class ZohoService
      * Retorna datos del owner asignado para WhatsApp + email.
      */
     public function syncLead(
-        string $firstName,
-        string $lastName,
-        string $email,
-        string $phone,
-        string $propiedadNombre,
-        string $propiedadSlug = '',
-        string $tipoLead      = 'meses',
-        string $duracionLabel = ''
-    ): array {
+            string $firstName,
+            string $lastName,
+            string $email,
+            string $phone,
+            string $propiedadNombre,
+            string $propiedadSlug = '',
+            string $tipoLead      = 'meses',
+            string $duracionLabel = '',
+            array  $utmData       = []
+        ): array {
         $this->log("syncLead INICIADO para: $email | propiedad: $propiedadNombre");
 
         // 1. Obtener token
@@ -81,7 +82,7 @@ class ZohoService
         if (!$exists) {
             $zohoLeadId = $this->createLead(
                 $token, $firstName, $lastName, $email, $phone,
-                $propiedadNombre, $zohoNombre, $ownerId, $tipoLead, $duracionLabel
+                $propiedadNombre, $zohoNombre, $ownerId, $tipoLead, $duracionLabel, $utmData
             );
             if (!$zohoLeadId) {
                 return $this->fallback('No se pudo crear lead en Zoho');
@@ -90,7 +91,7 @@ class ZohoService
             // Esperar a que Zoho procese el round-robin
             sleep(3);
         } else {
-            $this->updateLeadInterest($token, $zohoLeadId, $existingLead, $propiedadNombre, $zohoNombre);
+            $this->updateLeadInterest($token, $zohoLeadId, $existingLead, $propiedadNombre, $zohoNombre, $tipoLead, $duracionLabel, $utmData);
             $this->log("Lead ACTUALIZADO: $zohoLeadId");
         }
 
@@ -184,7 +185,8 @@ class ZohoService
         string $zohoNombre,
         ?string $ownerId,
         string $tipoLead,
-        string $duracionLabel = ''
+        string $duracionLabel = '',
+        array  $utmData       = []
     ): ?string {
         $payload = [
             'First_Name'               => $firstName,
@@ -192,10 +194,27 @@ class ZohoService
             'Email'                    => $email,
             'Phone'                    => $phone,
             'Company'                  => 'Park Life',
-            'Description'              => 'Lead del sitio web - Tipo: ' . $tipoLead . ($duracionLabel ? ' - Duración: ' . $duracionLabel : '') . ' - Propiedad: ' . $propNombre,
+            'Description'              => 'Lead del sitio web - Tipo: ' . $tipoLead . ($duracionLabel ? ' - Duración: ' . $duracionLabel : '') . ' - Propiedad: ' . $propNombre . (!empty($utmData['amueblado']) ? ' - Amueblado: Sí' : '') . (!empty($utmData['mascota']) ? ' - Mascota: Sí' : ''),
             'Lead_Source'              => 'Sitio Web',
             'Desarrollo_de_Inter_s'    => $zohoNombre,
         ];
+        
+        // UTM → Social Lead ID en Zoho
+        $campaignId = $utmData['utm_id'] ?? $utmData['utm_campaign'] ?? '';
+        if ($campaignId) {
+            $payload['leadchain0__Social_Lead_ID'] = $campaignId;
+            $this->log("UTM Campaign ID → Social_Lead_ID: {$campaignId}");
+        }
+
+        // Enriquecer Description con UTMs completos
+        $utmParts = [];
+        if (!empty($utmData['utm_source']))   $utmParts[] = 'Source: ' . $utmData['utm_source'];
+        if (!empty($utmData['utm_medium']))   $utmParts[] = 'Medium: ' . $utmData['utm_medium'];
+        if (!empty($utmData['utm_campaign'])) $utmParts[] = 'Campaign: ' . $utmData['utm_campaign'];
+        if (!empty($utmData['utm_content']))  $utmParts[] = 'Content: ' . $utmData['utm_content'];
+        if ($utmParts) {
+            $payload['Description'] .= "\n\n--- UTM ---\n" . implode(' | ', $utmParts);
+        }
 
         // Solo forzar owner para Querétaro; CDMX/GDL usan round-robin
         if ($ownerId) {
@@ -225,11 +244,28 @@ class ZohoService
         string $leadId,
         array  $existingLead,
         string $propNombre,
-        string $zohoNombre
+        string $zohoNombre,
+        string $tipoLead      = '',
+        string $duracionLabel = '',
+        array  $utmData       = []
     ): void {
-        $newInterest       = "\n\n--- NUEVO INTERÉS (" . date('Y-m-d H:i:s') . ") ---\nPropiedad: $propNombre";
-        $currentDesc       = $existingLead['Description'] ?? '';
-        $updatedDesc       = $currentDesc . $newInterest;
+        $lines = [];
+        $lines[] = "\n\n--- NUEVO INTERÉS (" . date('Y-m-d H:i:s') . ") ---";
+        $lines[] = "Propiedad: $propNombre";
+        if ($tipoLead)      $lines[] = "Tipo: $tipoLead";
+        if (!empty($utmData['amueblado'])) $lines[] = "Amueblado: Sí";
+        if (!empty($utmData['mascota']))   $lines[] = "Mascota: Sí";
+
+        // UTMs
+        $utmParts = [];
+        if (!empty($utmData['utm_source']))   $utmParts[] = 'Source: ' . $utmData['utm_source'];
+        if (!empty($utmData['utm_medium']))   $utmParts[] = 'Medium: ' . $utmData['utm_medium'];
+        if (!empty($utmData['utm_campaign'])) $utmParts[] = 'Campaign: ' . $utmData['utm_campaign'];
+        if ($utmParts) $lines[] = "UTM: " . implode(' | ', $utmParts);
+
+        $newInterest = implode("\n", $lines);
+        $currentDesc = $existingLead['Description'] ?? '';
+        $updatedDesc = $currentDesc . $newInterest;
 
         $response = $this->curlPut(
             self::API_BASE . '/Leads/' . $leadId,

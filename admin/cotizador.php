@@ -22,7 +22,7 @@ require_once __DIR__ . '/includes/layout.php';
 $csrf       = adminCsrf();
 $tab        = $_GET['tab'] ?? 'nueva';
 $adminId    = (int)($_SESSION['admin_id'] ?? 0);
-$adminRole  = $_SESSION['admin_role'] ?? 'editor';
+$adminRole  = currentAdminRole();
 $propiedades = dbFetchAll("SELECT id, nombre FROM propiedades WHERE activo=1 ORDER BY nombre");
 $scheme = ($_SERVER['REQUEST_SCHEME'] ?? 'https');
 if (str_contains($_SERVER['HTTP_HOST'] ?? '', 'localhost')) $scheme = 'http';

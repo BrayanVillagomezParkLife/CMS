@@ -229,11 +229,16 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
         @media(max-width:1023px){.booking-hero-wrapper.is-sticky{padding:8px 5%;top:72px}.booking-hero-wrapper.is-sticky .booking-widgets{display:none!important}.booking-hero-wrapper.is-sticky.is-expanded .booking-widgets{display:block!important}}
         @media(min-width:1024px){.booking-hero-wrapper.is-sticky .booking-widgets{display:block!important}}
         .booking-mobile-collapsed{display:none}
+        #ubicacion iframe{max-width:100%!important;width:100%!important}
+        #ubicacion .rounded-2xl{max-width:100%}
         /* Galería */
         .gallery-item{overflow:hidden;cursor:pointer;border-radius:1rem}
         .gallery-item img{transition:transform .7s ease}
         /* Habitaciones */
         .hab-card.active{border-color:#202944;background:#f0f2f8}
+        section:not(#inicio){position:relative;z-index:1}
+        .booking-hero-wrapper.is-sticky{z-index:9999!important}
+
     </style>
 </head>
 <body class="font-jakarta bg-park-cream text-gray-800 antialiased">
@@ -315,7 +320,7 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
 <!-- ═══════════════════════════════════════════════════════════
      HERO
 ═══════════════════════════════════════════════════════════════ -->
-<section id="inicio" class="relative min-h-screen flex items-center overflow-hidden">
+<section id="inicio" class="relative min-h-[85vh] sm:min-h-screen flex items-center overflow-hidden">
     <div class="absolute inset-0" id="hero-bg">
         <?php if (count($imgHero) > 1): ?>
         <!-- Carrusel hero con múltiples fotos -->
@@ -345,16 +350,16 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
     <div class="absolute top-20 right-10 w-72 h-72 bg-park-sage/20 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-20 left-10 w-96 h-96 bg-park-sage/10 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8 w-full">
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-32 pb-4 sm:pb-8 w-full">
         <div class="text-center text-white mb-12">
             <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6">
                 <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                 <span class="text-sm font-medium"><?= e(dbVal($propiedad, 'destino_nombre') ?: 'México') ?><?= s('prop.disponible') ?></span>
             </div>
-            <h1 class="font-asap text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+            <h1 class="font-asap text-3xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-3 sm:mb-6">
                 <?= nl2br(e(dbVal($propiedad, 'hero_slogan') ?: 'Bienvenido a ' . e($propiedad['nombre']))) ?>
             </h1>
-            <p class="text-lg sm:text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p class="hidden sm:block text-lg sm:text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
                 <?= e(dbVal($propiedad, 'descripcion_corta')) ?>
             </p>
         </div>
@@ -504,10 +509,10 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
         </div>
 
         <!-- Stats rápidos de la propiedad -->
-        <div class="grid grid-cols-3 gap-6 max-w-2xl mx-auto mt-16 pt-8 border-t border-white/20 text-white text-center">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 max-w-2xl mx-auto mt-10 sm:mt-16 text-white text-center bg-park-blue/60 backdrop-blur-md rounded-2xl px-6 sm:px-8 py-5 sm:py-6 border border-white/10">
             <!-- Precio por noche — se actualiza dinámicamente -->
             <div>
-                <div id="precio-noche-val" class="text-3xl sm:text-4xl font-bold text-park-sage">
+                <div id="precio-noche-val" class="text-2xl sm:text-4xl font-bold text-white">
                     <?php if ($propiedad['precio_desde_dia']): ?>
                     <?= formatPrice((float)$propiedad['precio_desde_dia']) ?>
                     <?php else: ?>
@@ -518,7 +523,7 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
             </div>
             <!-- Precio por mes -->
             <div>
-                <div id="precio-mes-val" class="text-3xl sm:text-4xl font-bold text-park-sage">
+                <div id="precio-mes-val" class="text-2xl sm:text-4xl font-bold text-white">
                     <?php if ($propiedad['precio_desde_mes']): ?>
                     <?= formatPrice((float)$propiedad['precio_desde_mes']) ?>
                     <?php else: ?>
@@ -528,7 +533,7 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
                 <div class="text-sm text-white/60 mt-1"><?= s('booking.por_mes') ?></div>
             </div>
             <div>
-                <div class="text-3xl sm:text-4xl font-bold text-park-sage">24/7</div>
+                <div class="text-2xl sm:text-4xl font-bold text-white">24/7</div>
                 <div class="text-sm text-white/60 mt-1"><?= s('booking.soporte') ?></div>
             </div>
         </div>
@@ -816,7 +821,7 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
             <h2 class="font-asap text-4xl sm:text-5xl font-bold text-white mb-6"><?= s('prop.amenidades') ?></h2>
             <p class="text-white/70 text-lg leading-relaxed"><?= s('prop.amenidades_desc') ?></p>
         </div>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 reveal">
             <?php foreach ($amenidades as $am): ?>
             <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all duration-300">
                 <div class="w-14 h-14 bg-park-sage/20 rounded-xl flex items-center justify-center mb-4">
@@ -876,11 +881,11 @@ $propiedadesPorDestino = getPropiedadesPorDestino();
 
             <div class="reveal">
                 <?php if (!empty($propiedad['google_maps_embed'])): ?>
-                <div class="rounded-2xl overflow-hidden shadow-2xl h-[500px]">
+                <div class="rounded-2xl overflow-hidden shadow-2xl h-[300px] sm:h-[500px]">
                     <?= $propiedad['google_maps_embed'] ?>
                 </div>
                 <?php else: ?>
-                <div class="rounded-2xl overflow-hidden shadow-2xl h-[500px]">
+                <div class="rounded-2xl overflow-hidden shadow-2xl h-[300px] sm:h-[500px]">
                     <iframe
                         src="https://maps.google.com/maps?q=<?= urlencode($propiedad['lat'] . ',' . $propiedad['lng']) ?>&z=15&output=embed"
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
@@ -1095,9 +1100,21 @@ function toggleFaq(i) {
                 </div>
             </div>
             <p class="text-[10px] text-gray-300 text-center mt-4 leading-relaxed">* Pre-cotización de referencia, sujeta a disponibilidad.</p>
-            <button onclick="closeCotizModal()" class="w-full mt-4 bg-park-blue text-white rounded-xl py-3 font-asap font-bold text-sm tracking-wider uppercase hover:bg-park-blue-light transition-all">
-                Entendido
-            </button>
+            <div class="mt-4 space-y-2" id="cotiz-ctas">
+                <a id="cotiz-wa-btn" href="#" target="_blank"
+                   class="w-full flex items-center justify-center gap-2 bg-green-500 text-white rounded-xl py-3 font-asap font-bold text-sm tracking-wider uppercase hover:bg-green-600 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 fill-white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    Escribir al asesor
+                </a>
+                <a id="cotiz-call-btn" href="#"
+                   class="w-full flex items-center justify-center gap-2 bg-park-blue text-white rounded-xl py-3 font-asap font-bold text-sm tracking-wider uppercase hover:bg-park-blue-light transition-all">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                    Llamar al asesor
+                </a>
+                <button onclick="closeCotizModal()" class="w-full text-gray-400 text-xs py-2 hover:text-gray-600 transition-colors">
+                    Cerrar
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -1255,7 +1272,7 @@ function submitLeadProp(e) {
                     }
 
                     Swal.fire({
-                        title: '¡Todo listo! 🎉',
+                        title: 'Cotización lista',
                         html,
                         confirmButtonColor: '#202944',
                         confirmButtonText: 'Entendido',

@@ -203,7 +203,12 @@ $zohoResult   = $zohoService->syncLead(
     phone:           $telefono,
     propiedadNombre: $propiedadNombre ?: 'General',
     propiedadSlug:   $propiedadSlug,
-    tipoLead:        'contacto'
+    tipoLead:        'contacto',
+    utmData:         [
+        'utm_source'   => $utmSource,
+        'utm_medium'   => $utmMedium,
+        'utm_campaign' => $utmCampaign,
+    ]
 );
 
 $zohoFailed    = !$zohoResult['success'];

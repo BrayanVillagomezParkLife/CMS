@@ -10,17 +10,20 @@ ob_start(); // capturar cualquier output espurio antes del JSON
  * Flujo:
  *   1. Validaciones (método, CSRF, honeypot, reCAPTCHA, rate limit)
  *   2. Sanitizar y validar campos
- *   3. syncToZoho → obtiene owner asignado
- *   4. INSERT en tabla `leads`
- *   5. Email notificación interna (asesor en CC)
- *   6. Email confirmación al cliente
- *   7. WhatsApp al equipo (template avisacomerciales3)
- *   8. Responder JSON {success, message}
+ *   3. Anti-duplicados: si mismo email+propiedad en 5min → actualizar si cambió algo
+ *   4. syncToZoho → obtiene owner asignado
+ *   5. INSERT en tabla `leads`
+ *   6. Email notificación interna (asesor en CC)
+ *   7. Email confirmación al cliente
+ *   8. WhatsApp al equipo (template avisacomerciales3)
+ *   9. Responder JSON {success, message, cotizacion}
  *
  * En caso de fallo de Zoho:
  *   - Lead se guarda igual en BD (in_zoho = 3)
  *   - WhatsApp de alerta solo a Brayan
  *   - El cliente recibe respuesta exitosa (error silencioso)
+ *
+ * v2.1 — 2026-03-05 — Duplicate UPDATE + UTM tracking + asesor_wa en response
  * ============================================================
  */
 
@@ -116,14 +119,18 @@ if (!$propiedad && $propiedadId) {
     $propiedad = dbFetchOne("SELECT * FROM propiedades WHERE id = ? AND activo = 1", [$propiedadId]);
 }
 if (!$propiedad) {
-    // Fallback: guardar igual sin propiedad
     $propiedadNombre = sanitizeStr($_POST['propiedad_nombre'] ?? $propiedadSlug);
 } else {
     $propiedadNombre = $propiedad['nombre'];
     $propiedadId     = (int)$propiedad['id'];
 }
 
-// ─── Anti-duplicados: mismo email+propiedad en los últimos 5 min ───────────
+// ═══════════════════════════════════════════════════════════════════════════
+// ANTI-DUPLICADOS: mismo email+propiedad en los últimos 5 min
+// Si cambió duración/mascota/amueblado → actualizar lead existente
+// Si no cambió nada → solo recalcular cotización
+// No se re-notifica por WA/email (el asesor ya fue avisado)
+// ═══════════════════════════════════════════════════════════════════════════
 $existingLead = dbFetchOne(
     "SELECT id FROM leads 
      WHERE email = ? AND propiedad_id = ? AND tipo = 'meses'
@@ -131,10 +138,105 @@ $existingLead = dbFetchOne(
      LIMIT 1",
     [$email, $propiedadId]
 );
+
 if ($existingLead) {
-    // Silencioso: el usuario ya mandó la misma solicitud recientemente
-    logApp('info', 'Duplicate lead bloqueado', ['email' => $email, 'propiedad_id' => $propiedadId]);
-    jsonResponse(['success' => true, 'message' => 'Recibimos tu solicitud. Te contactamos en menos de 2 hrs.']);
+    $dupId = (int)$existingLead['id'];
+
+    // Verificar si cambiaron parámetros de cotización
+    $oldLead = dbFetchOne(
+        "SELECT duracion_meses, mascota, amueblado FROM leads WHERE id = ?",
+        [$dupId]
+    );
+    $changed = $oldLead
+        && ((int)$oldLead['duracion_meses'] !== $duracion
+            || (int)$oldLead['mascota'] !== $mascota
+            || (int)$oldLead['amueblado'] !== $amueblado);
+
+    if ($changed) {
+        // Actualizar lead existente con nuevos parámetros
+        dbExecute(
+            "UPDATE leads SET duracion_meses = ?, mascota = ?, amueblado = ?, comentarios = ? WHERE id = ?",
+            [$duracion, $mascota, $amueblado, $comentarios ?: null, $dupId]
+        );
+        logApp('info', 'Lead actualizado (re-cotización)', [
+            'id' => $dupId, 'email' => $email,
+            'duracion' => $duracion, 'mascota' => $mascota, 'amueblado' => $amueblado
+        ]);
+    } else {
+        logApp('info', 'Duplicate lead — sin cambios', ['id' => $dupId, 'email' => $email]);
+    }
+
+    // Recalcular cotización para mostrar en modal
+    $cotizacion  = [];
+    $precioDesde = null;
+    $ownerName     = 'Equipo Park Life';
+    $ownerWhatsapp = cfg('whatsapp_ventas', '525543481711');
+
+    if ($propiedadId) {
+        try {
+            $colPrecio = in_array($duracion, range(12, 99)) ? 'precio_mes_12'
+                       : ($duracion >= 6 ? 'precio_mes_6' : 'precio_mes_1');
+
+            $habs = dbFetchAll(
+                "SELECT nombre, num_camas as capacidad, metros_cuadrados,
+                        {$colPrecio} as precio_mes,
+                        precio_mantenimiento, precio_servicios, precio_mascota
+                 FROM habitaciones
+                 WHERE propiedad_id = ? AND activa = 1
+                 ORDER BY {$colPrecio} ASC",
+                [$propiedadId]
+            );
+
+            foreach ($habs as $h) {
+                $base = (float)($h['precio_mes'] ?? 0);
+                if ($base <= 0) continue;
+                $total = $base
+                       + ((float)($h['precio_mantenimiento'] ?? 0) * 1.16)
+                       + ((float)($h['precio_servicios']     ?? 0) * 1.16);
+                if ($mascota) $total += (float)($h['precio_mascota'] ?? 0);
+                $cotizacion[] = [
+                    'nombre'       => $h['nombre'],
+                    'capacidad'    => $h['capacidad'],
+                    'metros'       => $h['metros_cuadrados'],
+                    'precio'       => round($total),
+                    'mejor_precio' => false,
+                ];
+            }
+            if (!empty($cotizacion)) {
+                $precioDesde = min(array_column($cotizacion, 'precio'));
+                foreach ($cotizacion as &$row) {
+                    $row['mejor_precio'] = ($row['precio'] === $precioDesde);
+                }
+                unset($row);
+            }
+
+            // Obtener asesor del lead existente
+            $existLead = dbFetchOne(
+                "SELECT zoho_owner_name, owner_whatsapp FROM leads WHERE id = ?",
+                [$dupId]
+            );
+            $ownerName     = $existLead['zoho_owner_name'] ?? 'Equipo Park Life';
+            $ownerWhatsapp = $existLead['owner_whatsapp']  ?? cfg('whatsapp_ventas', '525543481711');
+        } catch (\Throwable $e) {}
+    }
+
+    jsonResponse([
+        'success'    => true,
+        'message'    => 'Recibimos tu solicitud. Te contactamos en menos de 2 hrs.',
+        'lead_id'    => $dupId,
+        'cotizacion' => [
+            'nombre'       => $nombre,
+            'propiedad'    => $propiedadNombre,
+            'duracion'     => $durLabel,
+            'precio_desde' => $precioDesde,
+            'habitaciones' => $cotizacion,
+            'asesor'       => $ownerName,
+            'asesor_wa'    => $ownerWhatsapp,
+            'asesor_tel'   => $ownerWhatsapp,
+            'amueblado'    => (bool)$amueblado,
+            'mascota'      => (bool)$mascota,
+        ],
+    ]);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -158,7 +260,7 @@ $leadId = dbInsert('leads', [
     'utm_medium'       => $utmMedium   ?: null,
     'utm_campaign'     => $utmCampaign ?: null,
     'utm_content'      => $utmContent  ?: null,
-    'in_zoho'          => 0,   // pendiente hasta confirmar Zoho
+    'in_zoho'          => 0,
     'lead_source'      => 'Sitio Web',
 ]);
 
@@ -182,7 +284,15 @@ $zohoResult  = $zohoService->syncLead(
     propiedadNombre: $propiedadNombre,
     propiedadSlug:   $propiedadSlug,
     tipoLead:        'meses',
-    duracionLabel:   $durLabel
+    duracionLabel:   $durLabel,
+    utmData:         [
+        'utm_source'   => $utmSource,
+        'utm_medium'   => $utmMedium,
+        'utm_campaign' => $utmCampaign,
+        'utm_content'  => $utmContent,
+        'amueblado'    => $amueblado,
+        'mascota'      => $mascota,
+    ]
 );
 
 $zohoFailed    = !$zohoResult['success'];
@@ -265,7 +375,6 @@ $precioDesde = null;
 
 if ($propiedadId) {
     try {
-        // Columna de precio según duración (whitelisted — no viene del usuario)
         $colPrecio = in_array($duracion, range(12, 99)) ? 'precio_mes_12'
                    : ($duracion >= 6 ? 'precio_mes_6' : 'precio_mes_1');
 
@@ -309,7 +418,6 @@ if ($propiedadId) {
             'propiedad_id' => $propiedadId,
             'error'        => $e->getMessage(),
         ]);
-        // No bloquear — el lead ya fue guardado, solo no habrá cotización en el modal
     }
 }
 
@@ -317,16 +425,18 @@ if ($propiedadId) {
 // RESPUESTA FINAL
 // ═══════════════════════════════════════════════════════════════════════════
 jsonResponse([
-    'success'          => true,
-    'message'          => 'Recibimos tu solicitud. Te contactamos en menos de 2 hrs.',
-    'lead_id'          => $leadId,
-    'cotizacion'       => [
+    'success'    => true,
+    'message'    => 'Recibimos tu solicitud. Te contactamos en menos de 2 hrs.',
+    'lead_id'    => $leadId,
+    'cotizacion' => [
         'nombre'       => $nombre,
         'propiedad'    => $propiedadNombre,
         'duracion'     => $durLabel,
         'precio_desde' => $precioDesde,
         'habitaciones' => $cotizacion,
         'asesor'       => $ownerName,
+        'asesor_wa'    => $ownerWhatsapp ?: cfg('whatsapp_ventas', '525543481711'),
+        'asesor_tel'   => $ownerWhatsapp ?: cfg('whatsapp_ventas', '525543481711'),
         'amueblado'    => (bool)$amueblado,
         'mascota'      => (bool)$mascota,
     ],

@@ -77,7 +77,7 @@ $year = date('Y');
 
         <!-- Bottom bar -->
         <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p class="text-white/40 text-sm">© <?= $year ?> Park Life Properties. <?= s('footer.derechos') ?></p>
+            <p class="text-white/40 text-sm">&copy; <?= $year ?> Park Life Properties. <?= s('footer.derechos') ?></p>
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                 <span class="text-white/40 text-sm"><?= (int)cfg('total_propiedades', '14') ?> <?= s('footer.props_disp') ?></span>
@@ -86,9 +86,8 @@ $year = date('Y');
     </div>
 </footer>
 
-<!-- ── Strings traducibles para JavaScript — servidos desde BD vía s() ─── -->
+<!-- ── Strings traducibles para JavaScript ─────────────────────────────── -->
 <?php
-// ── Strings JS leídos de BD — multiidioma gestionado desde CMS ─────────
 $jsStrings = [
     'cuando_donde','cotizar_mensual','fechas_titulo','fechas_texto',
     'propiedad_titulo','propiedad_texto','enviando','exito','error_envio',
@@ -102,9 +101,16 @@ $jsStrings = [
     <?php endforeach; ?>
 </div>
 
+<!-- ── WhatsApp data (ANTES del script para que el JS lo encuentre) ────── -->
+<?php
+    $__waNum = $propiedad['whatsapp'] ?? cfg('whatsapp_ventas', '525543481711');
+    $__waCtx = isset($propiedad['nombre']) ? $propiedad['nombre'] : 'Park Life Properties';
+?>
+<div id="pk-wa-data" data-wa="<?= e(preg_replace('/[^0-9]/', '', $__waNum)) ?>" data-ctx="<?= e($__waCtx) ?>" style="display:none"></div>
+
 <!-- ── JS Global ──────────────────────────────────────────────────────────── -->
 <script>
-/** Lee un string traducido del DOM (DeepL ya lo procesó junto con el HTML) */
+/** Lee un string traducido del DOM */
 function str(k) {
     return document.querySelector('#js-i18n [data-k="' + k + '"]')?.textContent?.trim() || k;
 }
@@ -272,6 +278,96 @@ function handleFormSubmit(fid, bid, msg, endpoint) {
 
 handleFormSubmit("contactForm",  "submitBtn",   str("success_contacto"), "/api/contact.php");
 handleFormSubmit("jobForm",      "jobSubmitBtn",str("success_bolsa"),    "/api/contact.php");
+
+// ══════════════════════════════════════════════════════════════════════════
+// UTM Tracking + WhatsApp flotante con Campaign ID
+// ══════════════════════════════════════════════════════════════════════════
+(function(){
+    // === 1. Capturar UTMs de la URL ===
+    var p = new URLSearchParams(location.search);
+    var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','utm_id'];
+    var campaignParams = ['campaignid','campaign_id','gad_campaignid','fbcampaignid'];
+    var utms = {};
+    utmKeys.forEach(function(k){ if(p.get(k)) utms[k]=p.get(k); });
+    campaignParams.forEach(function(k){ if(p.get(k)) utms[k]=p.get(k); });
+
+    // Guardar en sessionStorage (persiste entre páginas)
+    if(Object.keys(utms).length) sessionStorage.setItem('pk_utms',JSON.stringify(utms));
+    var saved = JSON.parse(sessionStorage.getItem('pk_utms')||'{}');
+
+    // === 2. Inyectar UTMs en todos los forms ===
+    if(Object.keys(saved).length){
+        document.querySelectorAll('form').forEach(function(f){
+            Object.entries(saved).forEach(function(e){
+                if(!f.querySelector('input[name="'+e[0]+'"]')){
+                    var i=document.createElement('input');
+                    i.type='hidden'; i.name=e[0]; i.value=e[1];
+                    f.appendChild(i);
+                }
+            });
+        });
+    }
+
+    // === 3. Resolver Campaign ID (misma lógica del whatsapp_custom.js original) ===
+    function getCampaignId(){
+        if(saved.utm_id) return saved.utm_id;
+        var cKeys=['campaignid','campaign_id','gad_campaignid','fbcampaignid'];
+        for(var j=0;j<cKeys.length;j++){ if(saved[cKeys[j]]) return saved[cKeys[j]]; }
+        if(saved.utm_campaign){
+            var nums=saved.utm_campaign.match(/\d{6,}/);
+            return nums ? nums[0] : saved.utm_campaign;
+        }
+        return null;
+    }
+
+    // === 4. Crear botón flotante WhatsApp ===
+    var waData = document.getElementById('pk-wa-data');
+    if(!waData) return;
+    var waNum = waData.dataset.wa;
+    var waCtx = waData.dataset.ctx;
+    if(!waNum) return;
+    if(document.getElementById('pk-wa-float')) return;
+
+    var btn = document.createElement('a');
+    btn.id = 'pk-wa-float';
+    btn.href = '#';
+    btn.target = '_blank';
+    btn.setAttribute('aria-label','Chatea con nosotros por WhatsApp');
+    btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:2147483647;text-decoration:none;transition:all .3s ease';
+    btn.innerHTML = '<div style="background:#25D366;border-radius:50%;width:60px;height:60px;display:flex;justify-content:center;align-items:center;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:transform .3s ease">'
+        + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:35px;height:35px;fill:white">'
+        + '<path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>'
+        + '</svg>'
+        + '<div style="position:absolute;top:0;right:0;width:12px;height:12px;background:#FF4B4B;border-radius:50%;border:2px solid white"></div>'
+        + '</div>';
+
+    btn.addEventListener('mouseover', function(){ this.firstChild.style.transform='scale(1.1)'; });
+    btn.addEventListener('mouseout',  function(){ this.firstChild.style.transform='scale(1)'; });
+
+    btn.addEventListener('click', function(e){
+        e.preventDefault();
+        var cid = getCampaignId();
+        var msg;
+        if(cid){
+            msg = 'ID: ' + cid + '\n\u00a1Hola!, deseo informaci\u00f3n sobre ' + waCtx;
+        } else {
+            msg = '\u00a1Hola!, deseo informaci\u00f3n sobre ' + waCtx;
+        }
+        // GTM dataLayer
+        if(window.dataLayer){
+            window.dataLayer.push({
+                'event':'whatsapp_click',
+                'campaign_id': cid || 'organic',
+                'traffic_type': cid ? 'paid' : 'organic',
+                'property': waCtx,
+                'timestamp': new Date().toISOString()
+            });
+        }
+        window.open('https://wa.me/' + waNum + '?text=' + encodeURIComponent(msg), '_blank');
+    });
+
+    document.body.appendChild(btn);
+})();
 </script>
 </body>
 </html>
